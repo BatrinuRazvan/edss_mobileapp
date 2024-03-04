@@ -1,0 +1,43 @@
+/* Components.css */
+
+.center-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+  }
+  
+  .circle-button {
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .circle-button:hover {
+    background-color: #0056b3; /* Darker shade for hover effect */
+  }
+  
+  .full-screen {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    margin: 0;
+    border-radius: 0;
+    z-index: 10;
+    transform: scale(20); /* Scale up to fill screen, adjust value as needed */
+  }
+  
