@@ -1,52 +1,57 @@
+/* Chat Container */
 .chat-container {
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    overflow: auto;
-  }
-  
-  .chat-message {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .chat-message p {
-    max-width: 70%;
-    padding: 10px;
-    border-radius: 20px;
-    margin: 5px;
-  }
-  
-  .user {
-    justify-content: flex-end;
-  }
-  
-  .user p {
-    background-color: #dcf8c6;
-  }
-  
-  .assistant {
-    justify-content: flex-start;
-  }
-  
-  .assistant p {
-    background-color: #f1f1f1;
-  }
-  
-  .chat-message img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
-  
-  .response-buttons button {
-    margin: 0 5px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+/* Chat Messages */
+.chat-message {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+/* Message Bubbles */
+.message-bubble {
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 80%;
+  overflow-wrap: break-word;
+}
+
+.assistant .message-bubble {
+  background-color: #eee;
+  align-self: flex-start;
+}
+
+.user .message-bubble {
+  background-color: #007bff;
+  color: white;
+  align-self: flex-end;
+}
+
+/* Response Buttons */
+.response-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.response-buttons button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.response-buttons button:hover {
+  background-color: #0056b3;
+}
