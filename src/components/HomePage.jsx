@@ -31,6 +31,12 @@ const HomePage = () => {
       >
         Hurricane
       </button>
+      <button
+        className={`circle-button ${expand.notifications ? "full-screen" : ""}`}
+        onClick={() => navigateToScenario("notifications")}
+      >
+        Notifications
+      </button>
     </div>
   );
 };
