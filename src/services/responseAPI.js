@@ -16,20 +16,11 @@ class APIclient {
   getMessages = () => {
     return axiosInstance.get(this.endpoint).then((res) => res.json());
   };
+
+  getLocalMessages = (location) => {
+    return axiosInstance
+      .get(this.endpoint, { location })
+      .then((response) => response.json());
+  };
 }
 export default APIclient;
-// const responsePayload = { question, response };
-
-// try {
-//   await fetch(`${baseUrl}/saveResponse`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(responsePayload),
-//   });
-// } catch (error) {
-//   console.error("Failed to save response:", error);
-//   return false;
-// }
-// return true;

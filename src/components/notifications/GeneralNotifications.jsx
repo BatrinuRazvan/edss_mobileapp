@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
-import APIclient from "../services/responseAPI";
+import APIclient from "../services/responseAPI"; // Adjust this import path as necessary
 
-const Notifications = () => {
+const GeneralNotifications = () => {
   const [messages, setMessages] = useState([]);
   const [expandedMessageId, setExpandedMessageId] = useState(null);
 
   useEffect(() => {
-    const apiClient = new APIclient("/messages/getMessages");
-    const data = apiClient.getMessages();
-    setMessages(data);
+    const fetchMessages = async () => {
+      const apiClient = new APIclient("/messages/getMessages");
+      const data = await apiClient.getMessages(); // Make sure APIclient has a method getMessages()
+      setMessages(data);
+    };
+    fetchMessages();
   }, []);
 
   const handleExpandMessage = (id) => {
@@ -16,13 +19,13 @@ const Notifications = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Messages</h2>
+    <div>
+      <h2>General Notifications</h2>
       {messages.map((message) => (
         <div
           key={message.id}
           style={{
-            background: message.color, // Use the color from the message
+            background: message.COLOR, // Assuming message.COLOR is a valid CSS color
             margin: "10px 0",
             padding: "10px",
             borderRadius: "20px",
@@ -32,12 +35,13 @@ const Notifications = () => {
           onClick={() => handleExpandMessage(message.id)}
         >
           <h3>
-            {message.title} - {message.city} - {message.severity}
+            {message.TITLE} - {message.CITY}
           </h3>
           {expandedMessageId === message.id && (
             <div>
-              <p>{message.description}</p>
-              <button onClick={() => alert("More details")}>More</button>
+              <p>{message.DESCRIPTION}</p>
+              <p>Severity: {message.SEVERITY}</p>
+              <p>Range: {message.RANGEKM} km</p>
             </div>
           )}
         </div>
@@ -46,4 +50,4 @@ const Notifications = () => {
   );
 };
 
-export default Notifications;
+export default GeneralNotifications;
