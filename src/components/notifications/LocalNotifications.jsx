@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import APIclient from "../services/responseAPI"; // Adjust the import path as needed
+import APIclient from "../../services/restAPI"; // Adjust the import path as needed
 
 const LocalNotifications = () => {
   const [messages, setMessages] = useState([]);

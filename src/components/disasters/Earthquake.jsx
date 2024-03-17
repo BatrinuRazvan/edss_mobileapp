@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { saveResponse } from "../../services/responseAPI"; // Adjust the import path based on your project structure
+import APIclient from "../../services/restAPI"; // Adjust the import path based on your project structure
 
 const Earthquake = () => {
   const [step, setStep] = useState(1);
@@ -33,15 +33,19 @@ const Earthquake = () => {
     addMessage(response, "user");
 
     // Proceed with the next question or actions based on the step
+    const apiClient = new APIclient("/messages/saveResponse");
     if (step < questions.length) {
-      await saveResponse(questions[step - 1], response); // Save the current response
+      await apiClient.saveResponse(questions[step - 1], response); // Save the current response
       addMessage(questions[step], "assistant"); // Load the next question
       setStep(step + 1);
     } else {
       // Handle the final response
-      await saveResponse(questions[step - 1], response); // Save the final response
+      await apiClient.saveResponse(questions[step - 1], response); // Save the final response
       // Final message or logic when all questions are answered
-      addMessage("Thank you for your responses. Please stay safe and follow emergency protocols.", "assistant");
+      addMessage(
+        "Thank you for your responses. Please stay safe and follow emergency protocols.",
+        "assistant"
+      );
       // Optionally reset or conclude the chat here
     }
   };

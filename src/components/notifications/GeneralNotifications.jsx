@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import APIclient from "../services/responseAPI"; // Adjust this import path as necessary
+import APIclient from "../../services/restAPI"; // Adjust this import path as necessary
 
 const GeneralNotifications = () => {
   const [messages, setMessages] = useState([]);
@@ -9,6 +9,7 @@ const GeneralNotifications = () => {
     const fetchMessages = async () => {
       const apiClient = new APIclient("/messages/getMessages");
       const data = await apiClient.getMessages(); // Make sure APIclient has a method getMessages()
+      console.log(data);
       setMessages(data);
     };
     fetchMessages();
