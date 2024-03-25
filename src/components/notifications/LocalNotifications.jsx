@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import APIclient from "../../services/restAPI"; // Adjust the import path as needed
+import APIclient from "../../services/restAPI";
 
 const LocalNotifications = () => {
   const [messages, setMessages] = useState([]);
@@ -7,13 +7,19 @@ const LocalNotifications = () => {
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
-      (position) => {
+      async (position) => {
         const location = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         };
         const apiClient = new APIclient("/messages/getLocalMessages");
-        apiClient.getLocalMessages(location).then(setMessages); // Assuming getLocalMessages(location) returns a promise
+        try {
+          const data = await apiClient.getLocalMessages(location);
+          setMessages(data);
+        } catch (error) {
+          console.error("Error fetching local messages:", error);
+          alert("Error obtaining local notifications.");
+        }
       },
       (error) => {
         console.error("Geolocation error:", error);

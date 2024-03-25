@@ -1,67 +1,95 @@
 import React, { useState, useEffect, useRef } from "react";
-import APIclient from "../../services/restAPI"; // Adjust the import path based on your project structure
+import "./ChatUi.css"; // Import the CSS file
+
+const questions = [
+  {
+    id: 1,
+    text: "Are you experiencing an earthquake?",
+    options: [
+      { text: "Yes", nextQuestionId: 2 },
+      { text: "No", nextQuestionId: null }, // Assume this ends the conversation or leads to a different path
+    ],
+  },
+  {
+    id: 2,
+    text: "Are you hurt?",
+    options: [
+      { text: "Yes", nextQuestionId: null }, // Further questions or actions can be based on this answer
+      { text: "No", nextQuestionId: null },
+    ],
+  },
+  // Extend the questions array as needed
+];
 
 const Earthquake = () => {
-  const [step, setStep] = useState(1);
+  const [currentQuestionId, setCurrentQuestionId] = useState(1);
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
 
-  // Add the first question only once when the component mounts
+  // Effect for initializing the chat with the first question
   useEffect(() => {
-    const firstQuestion = "Are you experiencing an earthquake?";
-    addMessage(firstQuestion, "assistant");
-  }, []); // Empty dependency array ensures this effect only runs once on mount
+    // This check ensures we don't add the first question multiple times
+    if (messages.length === 0) {
+      const firstQuestion = questions.find((q) => q.id === 1); // Assuming the first question always has id 1
+      if (firstQuestion) {
+        setMessages([{ sender: "bot", text: firstQuestion.text }]);
+      }
+    }
+  }, []); // Empty dependency array ensures this runs once on component mount
 
+  // Effect for autoscroll
   useEffect(() => {
-    // Scroll to the bottom of the chat whenever messages update
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const addMessage = (text, type) => {
-    setMessages((prevMessages) => [...prevMessages, { text, type }]);
-  };
+  const handleOptionClick = (option) => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { sender: "user", text: option.text },
+    ]);
 
-  const questions = [
-    "Are you experiencing an earthquake?", // Already asked, corresponds to step 1
-    "Are you hurt?", // Step 2
-    // Add more questions as needed
-  ];
-  const handleResponse = async (response) => {
-    // Define the questions based on the step
-
-    // Save user response
-    addMessage(response, "user");
-
-    // Proceed with the next question or actions based on the step
-    const apiClient = new APIclient("/messages/saveResponse");
-    if (step < questions.length) {
-      await apiClient.saveResponse(questions[step - 1], response); // Save the current response
-      addMessage(questions[step], "assistant"); // Load the next question
-      setStep(step + 1);
-    } else {
-      // Handle the final response
-      await apiClient.saveResponse(questions[step - 1], response); // Save the final response
-      // Final message or logic when all questions are answered
-      addMessage(
-        "Thank you for your responses. Please stay safe and follow emergency protocols.",
-        "assistant"
+    if (option.nextQuestionId) {
+      const nextQuestion = questions.find(
+        (q) => q.id === option.nextQuestionId
       );
-      // Optionally reset or conclude the chat here
+      // Delay adding the next question to simulate typing/thinking delay
+      setTimeout(() => {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { sender: "bot", text: nextQuestion.text },
+        ]);
+        setCurrentQuestionId(nextQuestion.id); // Update the current question ID for the next interaction
+      }, 1000); // 1-second delay
+    } else {
+      // End of conversation or a different action could be triggered here
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: "bot", text: "Thank you for your responses." },
+      ]);
     }
   };
 
+  const currentQuestion = questions.find((q) => q.id === currentQuestionId);
+
   return (
     <div className="chat-container">
-      {messages.map((message, index) => (
-        <div key={index} className={`chat-message ${message.type}`}>
-          <div className="message-bubble">{message.text}</div>
-        </div>
-      ))}
-      <div ref={messagesEndRef} />
-      {step <= questions.length && (
-        <div className="response-buttons">
-          <button onClick={() => handleResponse("Yes")}>Yes</button>
-          <button onClick={() => handleResponse("No")}>No</button>
+      <div id="messageList">
+        {/* All the messages */}
+        {messages.map((message, index) => (
+          <div key={index} className={`message ${message.sender}`}>
+            {message.text}
+          </div>
+        ))}
+        {/* Scroll to the bottom element */}
+        <div ref={messagesEndRef} />
+      </div>
+      {currentQuestion && (
+        <div className="options">
+          {currentQuestion.options.map((option, index) => (
+            <button key={index} onClick={() => handleOptionClick(option)}>
+              {option.text}
+            </button>
+          ))}
         </div>
       )}
     </div>

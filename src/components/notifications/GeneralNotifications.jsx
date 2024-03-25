@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import APIclient from "../../services/restAPI"; // Adjust this import path as necessary
+import APIclient from "../../services/restAPI";
 
 const GeneralNotifications = () => {
   const [messages, setMessages] = useState([]);
@@ -8,8 +8,7 @@ const GeneralNotifications = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       const apiClient = new APIclient("/messages/getMessages");
-      const data = await apiClient.getMessages(); // Make sure APIclient has a method getMessages()
-      console.log(data);
+      const data = await apiClient.getMessages();
       setMessages(data);
     };
     fetchMessages();
@@ -26,7 +25,7 @@ const GeneralNotifications = () => {
         <div
           key={message.id}
           style={{
-            background: message.COLOR, // Assuming message.COLOR is a valid CSS color
+            background: message.color,
             margin: "10px 0",
             padding: "10px",
             borderRadius: "20px",
@@ -36,13 +35,13 @@ const GeneralNotifications = () => {
           onClick={() => handleExpandMessage(message.id)}
         >
           <h3>
-            {message.TITLE} - {message.CITY}
+            {message.title} - {message.city}
           </h3>
           {expandedMessageId === message.id && (
             <div>
-              <p>{message.DESCRIPTION}</p>
-              <p>Severity: {message.SEVERITY}</p>
-              <p>Range: {message.RANGEKM} km</p>
+              <p>{message.description}</p>
+              <p>Severity: {message.severity}</p>
+              <p>Range: {message.rangekm} km</p>
             </div>
           )}
         </div>

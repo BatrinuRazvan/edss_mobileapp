@@ -1,22 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import HomePage from "./components/HomePage"; // Your home page component
+import HomePage from "./components/HomePage";
 import Earthquake from "./components/disasters/Earthquake";
 import Epidemic from "./components/disasters/Epidemic";
 import Hurricane from "./components/disasters/Hurricane";
 import Notifications from "./components/notifications/Notifications";
-// Import other pages
+import Permissions from "./components/notifications/Permissions";
+import Login from "./components/Login";
+// Removed APIclient and NotificationPermission imports as they're no longer needed here
 
 function App() {
+  useEffect(() => {
+    // Only keep the Service Worker registration logic
+    if ('serviceWorker' in navigator) {
+      // Register the service worker
+      navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/sw.js`)
+        .then(registration => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch(err => {
+          console.error('Service Worker registration failed:', err);
+        });
+    }
+  }, []);
+
   return (
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/earthquake" element={<Earthquake />} />
         <Route path="/epidemic" element={<Epidemic />} />
-        <Route path="/earthquake" element={<Hurricane />} />
+        <Route path="/hurricane" element={<Hurricane />} />
         <Route path="/notifications/*" element={<Notifications />} />
-        {/* Define other routes */}
+        <Route path="/permissions" element={<Permissions />} />
       </Routes>
     </Router>
   );
