@@ -7,37 +7,56 @@
     align-items: center;
     height: 100vh;
     text-align: center;
-  }
+}
   
-  .circle-button {
-    background-color: #007bff; /* Bootstrap primary color */
-    color: white;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    margin: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: transform 0.5s ease-in-out;
+.circle-button {
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.5s ease-in-out;
+  position: relative; /* Ensures the transform-origin refers to the button itself */
+}
+
+.circle-button.full-screen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1); /* Centers the button and sets initial scale */
+  transform-origin: center; /* Ensures scaling occurs from the center */
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  z-index: 10;
+  animation: fillScreen 3.0s ease-in-out forwards;
+}
+
+@keyframes fillScreen {
+  from {
+    transform: translate(-50%, -50%) scale(1);
   }
+  to {
+    transform: translate(-50%, -50%) scale(20); /* Adjust scaling factor as needed */
+  }
+}
   
-  .circle-button:hover {
-    background-color: #0056b3; /* Darker shade for hover effect */
-  }
-  
-  .full-screen {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    margin: 0;
-    border-radius: 0;
-    z-index: 10;
-    transform: scale(20); /* Scale up to fill screen, adjust value as needed */
-  }
+.circle-button:hover {
+  background-color: #0056b3; /* Darker shade for hover effect */
+}
+
+.button-text {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.fade-out {
+  opacity: 0;
+}
   

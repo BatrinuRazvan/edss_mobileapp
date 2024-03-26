@@ -77,8 +77,12 @@ const HomePage = () => {
   }, [navigate]);
 
   const navigateToScenario = (scenarioPath) => {
-    setExpand({ [scenarioPath]: true }); // Set the specific button to expand
-    setTimeout(() => navigate(`/${scenarioPath}`), 500); // Delay navigation for the animation
+    setExpand({ [scenarioPath]: true });
+    setTimeout(() => {
+      navigate(`/${scenarioPath}`, {
+        state: { animation: "startChatTransition" },
+      });
+    }, 1000); // Adjust time to match the CSS animation duration
   };
 
   return (
@@ -87,7 +91,9 @@ const HomePage = () => {
         className={`circle-button ${expand.earthquake ? "full-screen" : ""}`}
         onClick={() => navigateToScenario("earthquake")}
       >
-        Earthquake
+        <span className={`button-text ${expand.earthquake ? "fade-out" : ""}`}>
+          Earthquake
+        </span>
       </button>
       <button
         className={`circle-button ${expand.epidemic ? "full-screen" : ""}`}
