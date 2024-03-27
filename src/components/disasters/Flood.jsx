@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./ChatUi.css";
 import botImage from "../logo512.png"; // Make sure the path is correct
 import APIclient from "../../services/restAPI";
-import questions from "./dataQuestions/earthquakeQuestions";
+import questions from "./dataQuestions/floodQuestions";
 
-const Earthquake = () => {
+const Flood = () => {
   const [messages, setMessages] = useState([]);
   const [userResponses, setUserResponses] = useState([]);
   const [animationStep, setAnimationStep] = useState("flyingIn");
@@ -58,7 +58,7 @@ const Earthquake = () => {
           ...prevMessages.slice(0, -1),
           typingMessage,
         ]);
-        setTimeout(() => typeCharByChar(msg, index + 1), 100);
+        setTimeout(() => typeCharByChar(msg, index + 1), 10);
       } else {
         // Typing completed
         setMessages((prevMessages) => [
@@ -68,7 +68,7 @@ const Earthquake = () => {
       }
     };
 
-    setTimeout(() => typeCharByChar(text, 0), 500);
+    setTimeout(() => typeCharByChar(text, 0), 100);
   };
 
   const handleOptionClick = (option) => {
@@ -85,6 +85,7 @@ const Earthquake = () => {
 
     if (option.nextQuestionId) {
       setCurrentQuestionId(option.nextQuestionId); // Update the current question ID
+      console.log(currentQuestionId);
       const nextQuestion = questions.find(
         (q) => q.id === option.nextQuestionId
       );
@@ -167,4 +168,4 @@ const Earthquake = () => {
   );
 };
 
-export default Earthquake;
+export default Flood;

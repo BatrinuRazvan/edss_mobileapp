@@ -99,19 +99,35 @@ const HomePage = () => {
         className={`circle-button ${expand.epidemic ? "full-screen" : ""}`}
         onClick={() => navigateToScenario("epidemic")}
       >
-        Epidemic
+        <span className={`button-text ${expand.epidemic ? "fade-out" : ""}`}>
+          Epidemic
+        </span>
       </button>
       <button
         className={`circle-button ${expand.hurricane ? "full-screen" : ""}`}
         onClick={() => navigateToScenario("hurricane")}
       >
-        Hurricane
+        <span className={`button-text ${expand.hurricane ? "fade-out" : ""}`}>
+          Hurricane
+        </span>
+      </button>
+      <button
+        className={`circle-button ${expand.flood ? "full-screen" : ""}`}
+        onClick={() => navigateToScenario("flood")}
+      >
+        <span className={`button-text ${expand.flood ? "fade-out" : ""}`}>
+          Flood
+        </span>
       </button>
       <button
         className={`circle-button ${expand.notifications ? "full-screen" : ""}`}
         onClick={() => navigateToScenario("notifications")}
       >
-        Notifications
+        <span
+          className={`button-text ${expand.notifications ? "fade-out" : ""}`}
+        >
+          Notifications
+        </span>
       </button>
     </div>
   );

@@ -7,6 +7,7 @@ import Hurricane from "./components/disasters/Hurricane";
 import Notifications from "./components/notifications/Notifications";
 import Permissions from "./components/notifications/Permissions";
 import Login from "./components/Login";
+import Flood from "./components/disasters/Flood";
 // Removed APIclient and NotificationPermission imports as they're no longer needed here
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
         <Route path="/earthquake" element={<Earthquake />} />
         <Route path="/epidemic" element={<Epidemic />} />
         <Route path="/hurricane" element={<Hurricane />} />
+        <Route path="/flood" element={<Flood />} />
         <Route path="/notifications/*" element={<Notifications />} />
         <Route path="/permissions" element={<Permissions />} />
       </Routes>
