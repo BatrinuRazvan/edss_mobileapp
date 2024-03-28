@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./ChatUi.css";
+import { FiSend } from "react-icons/fi";
 import botImage from "../logo512.png"; // Make sure the path is correct
-import APIclient from "../../services/restAPI";
+import ResponsesAPI from "../../services/userResponsesAPI";
 import questions from "./dataQuestions/floodQuestions";
+import LLMapi from "../../services/llmAPI";
+import { auth } from "../../services/firebase";
 
 const Flood = () => {
   const [messages, setMessages] = useState([]);
@@ -12,6 +15,7 @@ const Flood = () => {
   const messagesEndRef = useRef(null);
   const [showIcons, setShowIcons] = useState(false);
   const [currentQuestionId, setCurrentQuestionId] = useState(1);
+  const [userInput, setUserInput] = useState("");
 
   useEffect(() => {
     let timeoutId;
@@ -58,7 +62,8 @@ const Flood = () => {
           ...prevMessages.slice(0, -1),
           typingMessage,
         ]);
-        setTimeout(() => typeCharByChar(msg, index + 1), 10);
+
+        setTimeout(() => typeCharByChar(msg, index + 1), 0);
       } else {
         // Typing completed
         setMessages((prevMessages) => [
@@ -101,24 +106,58 @@ const Flood = () => {
     }
   };
 
-  const sendAllResponses = useCallback(
-    (email) => {
-      const apiClient = new APIclient("/abc"); // Make sure this matches your endpoint
-      apiClient
-        .saveResponses(userResponses, email)
-        .then(() => console.log("All responses sent successfully!"))
-        .catch((error) => console.error("Failed to send responses:", error));
-    },
-    [userResponses]
-  ); // Dependencies array: re-create this function when `userResponses` changes
+  const sendAllResponses = useCallback(() => {
+    const userId = auth.currentUser?.uid;
+    if (!userId) {
+      console.error("No user logged in");
+      return;
+    }
+
+    const apiClient = new ResponsesAPI("/flood"); // Adjust your endpoint as needed
+    apiClient
+      .saveResponses(userId, userResponses) // Pass the userId instead of email
+      .then(() => console.log("All responses sent successfully!"))
+      .catch((error) => console.error("Failed to send responses:", error));
+  }, [userResponses]);
 
   useEffect(() => {
     // Trigger sending responses when currentQuestionId changes to 5 or 6
-    if (currentQuestionId === 5 || currentQuestionId === 6) {
+    if (currentQuestionId === 111) {
       const userEmail = "user@example.com"; // Placeholder, replace with actual user email
       sendAllResponses(userEmail);
     }
   }, [currentQuestionId, sendAllResponses]);
+
+  const llmAPI = new LLMapi();
+
+  const handleTextInputChange = (e) => {
+    setUserInput(e.target.value);
+  };
+
+  const handleSendQuestion = async () => {
+    if (userInput.trim() !== "") {
+      // Directly display user's input immediately
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: "user", text: userInput },
+      ]);
+
+      try {
+        const llmResponse = await llmAPI.sendToAnswer(userInput);
+        const responseText = llmResponse.response;
+
+        // Use typeMessage to display the bot's response with the typing effect
+        typeMessage(responseText);
+
+        setUserInput(""); // Clear the input field after sending
+      } catch (error) {
+        console.error("Error fetching response from LLM:", error);
+
+        // Use typeMessage to display an error message from the bot with the typing effect
+        typeMessage("Sorry, I'm having trouble finding an answer right now.");
+      }
+    }
+  };
 
   const currentQuestion = questions.find((q) => q.id === currentQuestionId);
 
@@ -154,13 +193,32 @@ const Flood = () => {
           ))}
           <div ref={messagesEndRef} />
         </div>
-        {currentQuestion && (
+        {currentQuestionId !== 10 && currentQuestion && (
           <div className="options-container">
             {currentQuestion.options.map((option, index) => (
               <button key={index} onClick={() => handleOptionClick(option)}>
                 {option.text}
               </button>
             ))}
+          </div>
+        )}
+        {currentQuestionId === 10 && (
+          <div className="input-send-container">
+            <input
+              type="text"
+              value={userInput}
+              onChange={handleTextInputChange}
+              placeholder="Use this field to..."
+              className="user-input"
+            />
+            <button
+              onClick={handleSendQuestion}
+              className={
+                userInput.trim() ? "send-button icon-only" : "send-button"
+              }
+            >
+              {userInput.trim() ? <FiSend size={24} /> : "Type you question!"}
+            </button>
           </div>
         )}
       </div>

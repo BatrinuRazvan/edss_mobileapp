@@ -66,6 +66,7 @@ const HomePage = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // After ensuring the user is logged in, ask for notification permission
+        console.log(user);
         askForNotificationPermission(user);
       } else {
         // No user is signed in.

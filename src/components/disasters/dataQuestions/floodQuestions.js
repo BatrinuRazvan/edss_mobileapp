@@ -11,7 +11,7 @@ const questions = [
     id: 10,
     text: "Do you have any other questions?",
     options: [
-      { text: "Yes", nextQuestionId: 111 },
+      { text: "Yes", nextQuestionId: 0 },
       { text: "No", nextQuestionId: null },
     ],
   },

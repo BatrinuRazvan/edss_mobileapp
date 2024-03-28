@@ -300,3 +300,43 @@ margin-right: 5px;
     border-radius: 50%;
     / Add other styles such as shadows if necessary */
   }
+
+
+
+.input-send-container {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  gap: 6px; /* Adjust the space between the input and the button */
+}
+
+.user-input {
+  flex-grow: 1; /* Input takes up available space */
+  transition: flex-grow 0.3s ease; /* Smooth transition for resizing */
+  border: none;
+  background-color: #f0f0f0; /* Match container background */
+  padding: 10px 15px;
+  border-radius: 20px; /* Capsule-like shape */
+  margin-right: 6px; /* Space between input and button */
+  /* Other styles remain the same */
+}
+
+.send-button {
+  flex-grow: 1; /* Button takes up available space */
+  transition: flex-grow 0.3s ease; /* Smooth transition for resizing */
+  /* Ensure there's no text overflow */
+  white-space: nowrap;
+  border-radius: 30px;
+  overflow: hidden;
+  background-color: rgb(6, 190, 6);
+  /* Other button styles */
+}
+
+.send-button.icon-only {
+  flex-grow: 0; /* Button shrinks to fit icon only */
+  width: 60px; /* Adjust based on your icon size for a snug fit */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+  
