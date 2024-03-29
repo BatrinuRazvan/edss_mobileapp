@@ -9,9 +9,10 @@ class APIclient {
     this.endpoint = endpoint;
   }
 
-  saveResponses = (responses, email) => {
+  saveResponses = (userId, responses) => {
+    console.log(responses);
     return axiosInstance
-      .post(this.endpoint, { responses, email }) // Assuming the backend expects an object with responses and email
+      .post(this.endpoint, { userId, responses }) // Assuming the backend expects an object with responses and email
       .then((res) => console.log(res.data));
   };
 

@@ -42,7 +42,7 @@ const askForNotificationPermission = (user) => {
 
 const subscribeUserToPush = (user, registration) => {
   const publicKey =
-    "BJo28K3NruwmTtCrPPnf-rjd_YXd0ukt5ATkke_gIYbwfBmcIVaTJ181jvEnBho2WdamjNaP2CuSRBhndJrnIaI"; // Use your VAPID public key
+    "BGAUGfksW8MR0puO1T-LQuzYRNjmfLrwG9-PStRYckwEU3zVI3P60QOfsY6MoF82zwgqQpHUiLXBlsW425fh6no"; // Use your VAPID public key
   registration.pushManager
     .subscribe({
       userVisibleOnly: true,

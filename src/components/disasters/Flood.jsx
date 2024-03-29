@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./ChatUi.css";
 import { FiSend } from "react-icons/fi";
 import botImage from "../logo512.png"; // Make sure the path is correct
-import ResponsesAPI from "../../services/userResponsesAPI";
 import questions from "./dataQuestions/floodQuestions";
 import LLMapi from "../../services/llmAPI";
 import { auth } from "../../services/firebase";
+import APIclient from "../../services/restAPI";
 
 const Flood = () => {
   const [messages, setMessages] = useState([]);
@@ -83,6 +83,7 @@ const Flood = () => {
       { sender: "user", text: option.text },
     ]);
 
+    // Set user's response with the selected option
     setUserResponses((prevResponses) => [
       ...prevResponses,
       { question: messages[messages.length - 1]?.text, response: option.text },
@@ -113,7 +114,7 @@ const Flood = () => {
       return;
     }
 
-    const apiClient = new ResponsesAPI("/flood"); // Adjust your endpoint as needed
+    const apiClient = new APIclient("/user/saveResponse"); // Adjust your endpoint as needed
     apiClient
       .saveResponses(userId, userResponses) // Pass the userId instead of email
       .then(() => console.log("All responses sent successfully!"))
@@ -121,10 +122,8 @@ const Flood = () => {
   }, [userResponses]);
 
   useEffect(() => {
-    // Trigger sending responses when currentQuestionId changes to 5 or 6
     if (currentQuestionId === 111) {
-      const userEmail = "user@example.com"; // Placeholder, replace with actual user email
-      sendAllResponses(userEmail);
+      sendAllResponses();
     }
   }, [currentQuestionId, sendAllResponses]);
 
