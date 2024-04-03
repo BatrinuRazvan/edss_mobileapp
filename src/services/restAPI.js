@@ -74,7 +74,16 @@ class APIclient {
       .catch(err => console.error("Saving subscription failed:", err));
   };
 
-
+  getNearestExit = (location) => {
+    const queryParams = new URLSearchParams({
+      latitude: location.lat,
+      longitude: location.lng
+    }).toString();
+    console.log(queryParams);
+    console.log(queryParams); // Should now print "latitude=45.7244672&longitude=21.2303872"
+    return axiosInstance.get(`/user/getNearestExit?${queryParams}`)
+        .then(response => response.data);
+  };
 
 }
 
