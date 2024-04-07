@@ -12,6 +12,7 @@
     "dotenv": "^16.4.5",
     "firebase": "^10.9.0",
     "openai": "^4.29.2",
+    "pdfjs-dist": "^2.11.338",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.1",
     "react-dom": "^18.2.0",
