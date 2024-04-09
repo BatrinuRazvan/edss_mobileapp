@@ -10,19 +10,24 @@ import Login from "./components/Login";
 import Flood from "./components/disasters/Flood";
 import CityMap from "./components/CityMap";
 import DSUpage from "./components/specialUsers/DSUpage";
+import DisastersComponent from "./components/DisasterComponent";
 // Removed APIclient and NotificationPermission imports as they're no longer needed here
 
 function App() {
   useEffect(() => {
     // Only keep the Service Worker registration logic
-    if ('serviceWorker' in navigator) {
+    if ("serviceWorker" in navigator) {
       // Register the service worker
-      navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/sw.js`)
-        .then(registration => {
-          console.log('Service Worker registered with scope:', registration.scope);
+      navigator.serviceWorker
+        .register(`${process.env.PUBLIC_URL}/sw.js`)
+        .then((registration) => {
+          console.log(
+            "Service Worker registered with scope:",
+            registration.scope
+          );
         })
-        .catch(err => {
-          console.error('Service Worker registration failed:', err);
+        .catch((err) => {
+          console.error("Service Worker registration failed:", err);
         });
     }
   }, []);
@@ -40,6 +45,7 @@ function App() {
         <Route path="/permissions" element={<Permissions />} />
         <Route path="/map" element={<CityMap />} />
         <Route path="/dsu" element={<DSUpage />} />
+        <Route path="/disasters" element={<DisastersComponent />} />
       </Routes>
     </Router>
   );

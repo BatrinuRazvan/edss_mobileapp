@@ -7,6 +7,8 @@
     align-items: center;
     height: 100vh;
     text-align: center;
+    position: relative;
+    width: 100%;
 }
   
 .circle-button {
@@ -26,17 +28,42 @@
   position: relative; /* Ensures the transform-origin refers to the button itself */
 }
 
-.circle-button.full-screen {
+/* .circle-button.full-screen {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(1); /* Centers the button and sets initial scale */
-  transform-origin: center; /* Ensures scaling occurs from the center */
+  transform: translate(-50%, -50%) scale(1);
+  transform-origin: center;
   width: 100vw;
   height: 100vh;
   border-radius: 0;
   z-index: 10;
   animation: fillScreen 3.0s ease-in-out forwards;
+} */
+
+@keyframes expandToFill {
+  0% {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%; /* Start as a circle */
+    opacity: 1;
+  }
+  100% {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0%; /* Optional: Adjust for a slight capsule feel if desired */
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.circle-button.full-screen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  animation: expandToFill 1s ease-in-out forwards;
 }
 
 @keyframes fillScreen {
@@ -57,6 +84,19 @@
 }
 
 .fade-out {
-  opacity: 0;
+  animation: fadeOut 0.5s forwards;
 }
-  
+
+.fade-in {
+  animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
