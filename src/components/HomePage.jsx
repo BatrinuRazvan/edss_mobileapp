@@ -61,12 +61,16 @@ const subscribeUserToPush = (user, registration) => {
 const HomePage = () => {
   const navigate = useNavigate();
   const [expand, setExpand] = useState({});
+  const [userType, setUserType] = useState("");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("User logged in:", user);
         askForNotificationPermission(user);
+        const apiclient = new APIclient("/user/getUserType");
+        const storedUserType = apiclient.getUserType(user.uid); // Retrieve userType from localStorage
+        setUserType(storedUserType);
       } else {
         navigate("/login");
       }
@@ -88,6 +92,13 @@ const HomePage = () => {
     { id: "diagnostics", diameter: 100, minimumSeparation: 10 },
     { id: "disasters", diameter: 100, minimumSeparation: 10 },
     { id: "notifications", diameter: 100, minimumSeparation: 10 },
+    { id: "map", diameter: 100, minimumSeparation: 10 },
+    ...(userType === "DSU"
+      ? [{ id: "dsu", diameter: 100, minimumSeparation: 10 }]
+      : []),
+    ...(userType === "DSP"
+      ? [{ id: "dsp", diameter: 100, minimumSeparation: 10 }]
+      : []),
   ];
 
   const initialPositions = scenarios.map((_, index) => {

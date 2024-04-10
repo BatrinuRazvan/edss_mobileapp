@@ -23,38 +23,47 @@ class APIclient {
 
   getLocalMessages = (location) => {
     const queryParams = new URLSearchParams(location).toString();
-    return axiosInstance.get(`/messages/getLocalMessages?${queryParams}`)
-        .then(response => response.data);
+    return axiosInstance
+      .get(`/messages/getLocalMessages?${queryParams}`)
+      .then((response) => response.data);
   };
 
   updateLocation = ({ userId, latitude, longitude }) => {
     const params = new URLSearchParams();
-    params.append('userId', userId);
-    params.append('latitude', latitude);
-    params.append('longitude', longitude);
-    return axiosInstance.post(`${this.endpoint}`, params)
-      .then(res => console.log("Location saved:", res.data))
-      .catch(err => console.error("Saving location failed:", err));
+    params.append("userId", userId);
+    params.append("latitude", latitude);
+    params.append("longitude", longitude);
+    return axiosInstance
+      .post(`${this.endpoint}`, params)
+      .then((res) => console.log("Location saved:", res.data))
+      .catch((err) => console.error("Saving location failed:", err));
   };
 
-  saveUser = ({ userId, email, latitude, longitude }) => {
+  saveUser = ({ userId, email, latitude, longitude, userType }) => {
     // Construct a query string
     const params = new URLSearchParams({
-        userId, email, latitude, longitude
+      userId,
+      email,
+      latitude,
+      longitude,
+      userType,
     }).toString();
 
     return axiosInstance.post(`${this.endpoint}?${params}`);
   };
 
-
   saveSubscription = (userId, subscription) => {
-  // Extract the keys from the subscription object
-    const key = subscription.getKey ? subscription.getKey('p256dh') : '';
-    const auth = subscription.getKey ? subscription.getKey('auth') : '';
+    // Extract the keys from the subscription object
+    const key = subscription.getKey ? subscription.getKey("p256dh") : "";
+    const auth = subscription.getKey ? subscription.getKey("auth") : "";
 
     // Convert keys to base64 strings for easier handling on the backend
-    const p256dh = key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : '';
-    const authStr = auth ? btoa(String.fromCharCode.apply(null, new Uint8Array(auth))) : '';
+    const p256dh = key
+      ? btoa(String.fromCharCode.apply(null, new Uint8Array(key)))
+      : "";
+    const authStr = auth
+      ? btoa(String.fromCharCode.apply(null, new Uint8Array(auth)))
+      : "";
 
     // Log the keys for debugging purposes
     console.log(p256dh);
@@ -65,26 +74,32 @@ class APIclient {
       userId: userId,
       endpoint: subscription.endpoint,
       p256dh: p256dh,
-      auth: authStr
+      auth: authStr,
     };
-      
+
     // Send the prepared subscription object to the backend
-    return axiosInstance.post(this.endpoint,  subscriptionData)
-      .then(response => console.log("Subscription saved:", response.data))
-      .catch(err => console.error("Saving subscription failed:", err));
+    return axiosInstance
+      .post(this.endpoint, subscriptionData)
+      .then((response) => console.log("Subscription saved:", response.data))
+      .catch((err) => console.error("Saving subscription failed:", err));
   };
 
   getNearestExit = (location) => {
     const queryParams = new URLSearchParams({
       latitude: location.lat,
-      longitude: location.lng
+      longitude: location.lng,
     }).toString();
     console.log(queryParams);
-    console.log(queryParams); // Should now print "latitude=45.7244672&longitude=21.2303872"
-    return axiosInstance.get(`/user/getNearestExit?${queryParams}`)
-        .then(response => response.data);
+    return axiosInstance
+      .get(`/user/getNearestExit?${queryParams}`)
+      .then((response) => response.data);
   };
 
+  getUserType = (userId) => {
+    return axiosInstance
+      .post(this.endpoint, { userId })
+      .then((res) => console.log(res.data));
+  };
 }
 
 export default APIclient;
