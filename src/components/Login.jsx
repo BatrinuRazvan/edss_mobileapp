@@ -2,6 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithGoogle } from "../services/firebase";
 import APIclient from "../services/restAPI";
+import { FaUser, FaUserTie, FaUserSecret } from "react-icons/fa"; // Import icons
+import "./Login.css"; // Import a CSS file for styles
+import NavBar from "./costumizable/NavBar";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -43,10 +46,21 @@ const Login = () => {
 
   return (
     <div>
-      {/* Updated buttons to use the new login function with different userTypes */}
-      <button onClick={() => login("NORMAL")}>Login as Normal User</button>
-      <button onClick={() => login("DSP")}>Login as DSP User</button>
-      <button onClick={() => login("DSU")}>Login as DSU User</button>
+      <NavBar />
+      <div className="login-button-container">
+        <button className="login-button" onClick={() => login("NORMAL")}>
+          <FaUser className="login-icon" />
+          <span className="login-text">Normal User</span>
+        </button>
+        <button className="login-button" onClick={() => login("DSP")}>
+          <FaUserTie className="login-icon" />
+          <span className="login-text">DSP User</span>
+        </button>
+        <button className="login-button" onClick={() => login("DSU")}>
+          <FaUserSecret className="login-icon" />
+          <span className="login-text">DSU User</span>
+        </button>
+      </div>
     </div>
   );
 };

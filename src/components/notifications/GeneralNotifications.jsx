@@ -21,31 +21,33 @@ const GeneralNotifications = () => {
   return (
     <div>
       <h2>General Notifications</h2>
-      {messages.map((message) => (
-        <div
-          key={message.id}
-          style={{
-            background: message.color,
-            margin: "10px 0",
-            padding: "10px",
-            borderRadius: "20px",
-            cursor: "pointer",
-            color: "white",
-          }}
-          onClick={() => handleExpandMessage(message.id)}
-        >
-          <h3>
-            {message.title} - {message.city}
-          </h3>
-          {expandedMessageId === message.id && (
-            <div>
-              <p>{message.description}</p>
-              <p>Severity: {message.severity}</p>
-              <p>Range: {message.rangekm} km</p>
-            </div>
-          )}
-        </div>
-      ))}
+      <div style={{ padding: "20px" }}>
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            style={{
+              background: message.color,
+              margin: "10px 0",
+              padding: "10px",
+              borderRadius: "20px",
+              cursor: "pointer",
+              color: "white",
+            }}
+            onClick={() => handleExpandMessage(message.id)}
+          >
+            <h3>
+              {message.title} - {message.city}
+            </h3>
+            {expandedMessageId === message.id && (
+              <div>
+                <p>{message.description}</p>
+                <p>Severity: {message.severity}</p>
+                <p>Range: {message.rangekm} km</p>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

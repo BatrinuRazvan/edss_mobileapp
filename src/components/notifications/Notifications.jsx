@@ -1,22 +1,39 @@
-// Inside Notifications.jsx
-
 import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useMatch } from "react-router-dom";
 import GeneralNotifications from "./GeneralNotifications";
 import LocalNotifications from "./LocalNotifications";
+import NavBar from "../costumizable/NavBar";
+import "./Notifications.css"; // Make sure to create this CSS file
 
 const Notifications = () => {
+  // Use `useMatch` to determine which route is currently active
+  const isGeneralActive = useMatch("/notifications/general");
+  const isLocalActive = useMatch("/notifications/local");
+
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Notifications</h2>
-      <nav>
-        <Link to="/notifications/general">General</Link> |{" "}
-        <Link to="/notifications/local">Local</Link>
-      </nav>
-      <Routes>
-        <Route path="/general" element={<GeneralNotifications />} />
-        <Route path="/local" element={<LocalNotifications />} />
-      </Routes>
+    <div>
+      <NavBar />
+      <div className="notifications-container">
+        <h2>Notifications</h2>
+        <div className="links-container">
+          <Link
+            to="/notifications/general"
+            className={isGeneralActive ? "active" : ""}
+          >
+            General
+          </Link>
+          <Link
+            to="/notifications/local"
+            className={isLocalActive ? "active" : ""}
+          >
+            Local
+          </Link>
+        </div>
+        <Routes>
+          <Route path="/general" element={<GeneralNotifications />} />
+          <Route path="/local" element={<LocalNotifications />} />
+        </Routes>
+      </div>
     </div>
   );
 };

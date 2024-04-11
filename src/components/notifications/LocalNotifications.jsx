@@ -34,37 +34,39 @@ const LocalNotifications = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div>
       <h2>Local Messages</h2>
-      {messages.length > 0 ? (
-        messages.map((message) => (
-          <div
-            key={message.id}
-            style={{
-              background: message.color,
-              margin: "10px 0",
-              padding: "10px",
-              borderRadius: "20px",
-              cursor: "pointer",
-              color: "white",
-            }}
-            onClick={() => handleExpandMessage(message.id)}
-          >
-            <h3>
-              {message.title} - {message.city}
-            </h3>
-            {expandedMessageId === message.id && (
-              <div>
-                <p>{message.description}</p>
-                <p>Severity: {message.severity}</p>
-                <p>Range: {message.rangekm} km</p>
-              </div>
-            )}
-          </div>
-        ))
-      ) : (
-        <p>No local messages available.</p>
-      )}
+      <div style={{ padding: "20px" }}>
+        {messages.length > 0 ? (
+          messages.map((message) => (
+            <div
+              key={message.id}
+              style={{
+                background: message.color,
+                margin: "10px 0",
+                padding: "10px",
+                borderRadius: "20px",
+                cursor: "pointer",
+                color: "white",
+              }}
+              onClick={() => handleExpandMessage(message.id)}
+            >
+              <h3>
+                {message.title} - {message.city}
+              </h3>
+              {expandedMessageId === message.id && (
+                <div>
+                  <p>{message.description}</p>
+                  <p>Severity: {message.severity}</p>
+                  <p>Range: {message.rangekm} km</p>
+                </div>
+              )}
+            </div>
+          ))
+        ) : (
+          <p>No local messages available.</p>
+        )}
+      </div>
     </div>
   );
 };

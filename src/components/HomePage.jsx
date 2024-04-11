@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../services/firebase";
 import APIclient from "../services/restAPI"; // Adjust based on your actual path
-import DraggableBubble from "./DraggableBubble";
+import DraggableBubble from "./costumizable/DraggableBubble";
+import NavBar from "./costumizable/NavBar";
+import { MdNotifications, MdMap, MdHealing, MdWarning } from "react-icons/md";
 
 // Assuming urlBase64ToUint8Array function is moved to a utility file or kept here
 function urlBase64ToUint8Array(base64String) {
@@ -89,10 +91,25 @@ const HomePage = () => {
   const circleRadius = 150;
   const containerCenter = { x: 250, y: 250 };
   const scenarios = [
-    { id: "diagnostics", diameter: 100, minimumSeparation: 10 },
-    { id: "disasters", diameter: 100, minimumSeparation: 10 },
-    { id: "notifications", diameter: 100, minimumSeparation: 10 },
-    { id: "map", diameter: 100, minimumSeparation: 10 },
+    {
+      id: "diagnostics",
+      diameter: 100,
+      minimumSeparation: 10,
+      icon: <MdHealing />,
+    },
+    {
+      id: "disasters",
+      diameter: 100,
+      minimumSeparation: 10,
+      icon: <MdWarning />,
+    },
+    {
+      id: "notifications",
+      diameter: 100,
+      minimumSeparation: 10,
+      icon: <MdNotifications />,
+    },
+    { id: "map", diameter: 100, minimumSeparation: 10, icon: <MdMap /> },
     ...(userType === "DSU"
       ? [{ id: "dsu", diameter: 100, minimumSeparation: 10 }]
       : []),
@@ -120,28 +137,32 @@ const HomePage = () => {
   };
 
   return (
-    <div className={`center-container ${animationClass}`}>
-      {scenarios.map((scenario, index) => (
-        <DraggableBubble
-          key={scenario.id}
-          scenario={scenario.id}
-          diameter={scenario.diameter}
-          minimumSeparation={scenario.minimumSeparation}
-          initialPos={initialPositions[index]}
-          onClick={() =>
-            scenario.id === "disasters"
-              ? handleDisastersClick()
-              : navigateToScenario(scenario.id)
-          }
-          className={`scenario-bubble ${scenario.id} ${
-            expand[scenario.id] ? "expand" : ""
-          }`}
-        >
-          <span className="button-text">
-            {scenario.id.charAt(0).toUpperCase() + scenario.id.slice(1)}
-          </span>
-        </DraggableBubble>
-      ))}
+    <div>
+      <NavBar />
+      <div className={`center-container ${animationClass}`}>
+        {scenarios.map((scenario, index) => (
+          <DraggableBubble
+            key={scenario.id}
+            scenario={scenario.id}
+            diameter={scenario.diameter}
+            minimumSeparation={scenario.minimumSeparation}
+            initialPos={initialPositions[index]}
+            onClick={() =>
+              scenario.id === "disasters"
+                ? handleDisastersClick()
+                : navigateToScenario(scenario.id)
+            }
+            className={`scenario-bubble ${scenario.id} ${
+              expand[scenario.id] ? "expand" : ""
+            }`}
+          >
+            {React.cloneElement(scenario.icon, { size: "50px" })}
+            <span className="button-text">
+              {scenario.id.charAt(0).toUpperCase() + scenario.id.slice(1)}
+            </span>
+          </DraggableBubble>
+        ))}
+      </div>
     </div>
   );
 };

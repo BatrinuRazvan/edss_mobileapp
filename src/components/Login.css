@@ -1,0 +1,35 @@
+.login-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Adjust the space between buttons */
+    margin-top: 20%;
+  }
+  
+  .login-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px; /* Adjust the space between icon and text */
+    padding: 10px; /* Add some padding around the button content */
+    border: none;
+    background-color: #64b1ff; /* Light grey background, you can change this */
+    cursor: pointer;
+    transition: background-color 0.3s; /* Optional: for a hover effect */
+    width: 120px;
+    margin-top: 5%;
+  }
+  
+  .login-button:hover {
+    background-color: #848cff; /* Slightly darker grey on hover */
+  }
+  
+  .login-icon {
+    width: 48px; /* Adjust icon size */
+    height: 48px; /* Adjust icon size */
+  }
+  
+  .login-text {
+    display: block; /* This will put the text under the icon */
+  }
+  

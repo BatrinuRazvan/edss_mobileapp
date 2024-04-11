@@ -10,7 +10,7 @@ import Login from "./components/Login";
 import Flood from "./components/disasters/Flood";
 import CityMap from "./components/CityMap";
 import DSUpage from "./components/specialUsers/DSUpage";
-import DisastersComponent from "./components/DisasterComponent";
+import DisastersComponent from "./components/disasters/DisasterComponent";
 // Removed APIclient and NotificationPermission imports as they're no longer needed here
 
 function App() {

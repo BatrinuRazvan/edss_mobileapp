@@ -17,8 +17,8 @@
   border: none;
   outline: none;
   cursor: pointer;
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   margin: 10px;
   display: flex;
@@ -28,7 +28,7 @@
   position: relative; /* Ensures the transform-origin refers to the button itself */
 }
 
-/* .circle-button.full-screen {
+.circle-button.full-screen {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -39,42 +39,22 @@
   border-radius: 0;
   z-index: 10;
   animation: fillScreen 3.0s ease-in-out forwards;
-} */
+}
 
 @keyframes expandToFill {
   0% {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%; /* Start as a circle */
-    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0; /* Start with a faded-out circle */
   }
   100% {
+    transform: translate(-50%, -50%) scale(20); /* Scale to fill the screen */
+    opacity: 1; /* Fade in the full screen */
     width: 100vw;
     height: 100vh;
-    border-radius: 0%; /* Optional: Adjust for a slight capsule feel if desired */
-    opacity: 1;
-    transform: translate(-50%, -50%);
+    border-radius: 0; /* Transition to a rectangle */
   }
 }
 
-.circle-button.full-screen {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-  animation: expandToFill 1s ease-in-out forwards;
-}
-
-@keyframes fillScreen {
-  from {
-    transform: translate(-50%, -50%) scale(1);
-  }
-  to {
-    transform: translate(-50%, -50%) scale(20); /* Adjust scaling factor as needed */
-  }
-}
-  
 .circle-button:hover {
   background-color: #0056b3; /* Darker shade for hover effect */
 }
@@ -83,6 +63,7 @@
   transition: opacity 0.3s ease-in-out;
 }
 
+/* The fade-out and fade-in animations are for other elements */
 .fade-out {
   animation: fadeOut 0.5s forwards;
 }

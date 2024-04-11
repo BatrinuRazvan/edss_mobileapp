@@ -9,7 +9,7 @@ import {
 import APIclient from "../services/restAPI";
 
 const containerStyle = {
-  height: "800px",
+  height: "600px",
   margin: "20px 0",
 };
 

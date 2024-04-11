@@ -1,0 +1,124 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #565656;
+    color: white;
+    padding: 0.5rem 1rem;
+    position: relative; /* Ensure the navbar is positioned relative to the sidebar */
+    z-index: 1000; /* Higher z-index to keep navbar above the sidebar */
+  }
+  
+  .navbar-title {
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -265px; /* Sidebar starts off-screen */
+    width: 250px;
+    height: 100%;
+    background: #7f7f7f;
+    transition: left 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 500; /* Lower z-index than navbar */
+    margin-top: 8%;
+  }
+  
+  .sidebar.open {
+    left: 0; /* Slide in the sidebar */
+    margin-top: 8%;
+  }
+  
+  .sidebar button {
+    padding: 10px;
+    margin-bottom: 5px; /* Space between buttons */
+    background: none;
+    border: 1px solid #adf0ff;
+    cursor: pointer;
+    text-align: left;
+  }
+  
+  .sidebar button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 400; /* Below navbar, above everything else */
+  }
+
+  /* Existing styles remain unchanged */
+
+.burger-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px; /* Adjust width as necessary */
+    height: 25px; /* Adjust height as necessary */
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .burger-line {
+    height: 3px;
+    background-color: white;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+  }
+  
+  .burger-line.top,
+  .burger-line.bottom {
+    width: 20px; /* Initial width of top and bottom lines */
+  }
+  
+  .burger-line.middle {
+    width: 30px; /* Width of middle line to match the width of burger-menu */
+  }
+  
+  .burger-menu.open .top {
+    width: 30px; /* Match middle line */
+  }
+  
+  .burger-menu.open .bottom {
+    width: 30px; /* Match middle line */
+  }
+  
+  .disasters-dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Aligns items to the left */
+    padding-left: 20px; /* Indent the dropdown items for visual hierarchy */
+    overflow: hidden;
+    max-height: 0; /* Start with a max-height of 0 */
+    transition: max-height 0.3s ease-in-out; /* Smooth transition for max-height */
+  }
+  
+  /* Style when dropdown is active */
+  .disasters-dropdown.active {
+    max-height: 200px; /* Adjust based on the content size */
+  }
+  
+  .disaster-option {
+    background: none;
+    border: none;
+    padding: 5px 0;
+    text-align: left;
+    width: 96%; /* Make buttons full width of the dropdown */
+    font-size: 0.9rem; /* Smaller font size for submenu items */
+  }
+  
+  .disaster-option:hover {
+    background-color: #f0f0f0; /* Add a hover effect */
+  }
+  
