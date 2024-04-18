@@ -6,7 +6,7 @@ import botImage from "../logo512.png"; // Make sure the path is correct
 import LLMapi from "../../services/llmAPI";
 import { parsePDF } from "../../services/parsePDF";
 
-const DSUpage = () => {
+const DSPpage = () => {
   const [messages, setMessages] = useState([]);
   const [animationStep, setAnimationStep] = useState("flyingIn");
   const [showBubble, setShowBubble] = useState(false); // Used to control the bubble display
@@ -31,7 +31,7 @@ const DSUpage = () => {
           setShowIcons(true); // Enable the icons to be shown after the animations
           setChatStarted(true);
           typeMessage(
-            "Hello! Here you can talk to me, the assistent, and define new behaviour by uploading files as a attested DSU user. \n\nHow can I help you today?"
+            "Hello! Here you can talk to me, the assistent, and define new behaviour by uploading files as a attested DSP user. \n\nHow can I help you today?"
           );
         }, 1000);
         break;
@@ -198,4 +198,4 @@ const DSUpage = () => {
   );
 };
 
-export default DSUpage;
+export default DSPpage;

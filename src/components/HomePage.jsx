@@ -152,14 +152,21 @@ const HomePage = () => {
                 ? handleDisastersClick()
                 : navigateToScenario(scenario.id)
             }
+            expandOnClick={
+              scenario.id === "map" ||
+              scenario.id === "diagnostics" ||
+              scenario.id === "notifications"
+            }
             className={`scenario-bubble ${scenario.id} ${
               expand[scenario.id] ? "expand" : ""
             }`}
           >
-            {React.cloneElement(scenario.icon, { size: "50px" })}
-            <span className="button-text">
-              {scenario.id.charAt(0).toUpperCase() + scenario.id.slice(1)}
-            </span>
+            <div className="scenario-content icon-transition">
+              {React.cloneElement(scenario.icon, { size: "50px" })}
+              <span className="button-text">
+                {scenario.id.charAt(0).toUpperCase() + scenario.id.slice(1)}
+              </span>
+            </div>
           </DraggableBubble>
         ))}
       </div>

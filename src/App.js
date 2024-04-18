@@ -10,7 +10,9 @@ import Login from "./components/Login";
 import Flood from "./components/disasters/Flood";
 import CityMap from "./components/CityMap";
 import DSUpage from "./components/specialUsers/DSUpage";
+import DSPpage from "./components/specialUsers/DSPpage";
 import DisastersComponent from "./components/disasters/DisasterComponent";
+import Diagnostics from "./components/disasters/Diagnostics";
 // Removed APIclient and NotificationPermission imports as they're no longer needed here
 
 function App() {
@@ -45,7 +47,9 @@ function App() {
         <Route path="/permissions" element={<Permissions />} />
         <Route path="/map" element={<CityMap />} />
         <Route path="/dsu" element={<DSUpage />} />
+        <Route path="/dsp" element={<DSPpage />} />
         <Route path="/disasters" element={<DisastersComponent />} />
+        <Route path="/diagnostics" element={<Diagnostics />} />
       </Routes>
     </Router>
   );

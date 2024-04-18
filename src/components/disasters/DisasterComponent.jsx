@@ -71,14 +71,17 @@ const DisasterComponent = () => {
             minimumSeparation={scenario.minimumSeparation}
             initialPos={initialPositions[index]}
             onClick={() => navigateToScenario(scenario.id)}
+            expandOnClick={scenario.id}
             className={`scenario-bubble ${scenario.id} ${
               expand[scenario.id] ? "expand" : ""
             }`}
           >
-            {scenario.icon}
-            <span className="button-text">
-              {scenario.id.charAt(0).toUpperCase() + scenario.id.slice(1)}
-            </span>
+            <div className="scenario-content icon-transition">
+              {scenario.icon}
+              <span className="button-text">
+                {scenario.id.charAt(0).toUpperCase() + scenario.id.slice(1)}
+              </span>
+            </div>
           </DraggableBubble>
         ))}
       </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithGoogle } from "../services/firebase";
 import APIclient from "../services/restAPI";
-import { FaUser, FaUserTie, FaUserSecret } from "react-icons/fa"; // Import icons
+import { FaUser, FaUserTie, FaUserSecret, FaUserMd } from "react-icons/fa"; // Import icons
 import "./Login.css"; // Import a CSS file for styles
 import NavBar from "./costumizable/NavBar";
 
@@ -51,6 +51,10 @@ const Login = () => {
         <button className="login-button" onClick={() => login("NORMAL")}>
           <FaUser className="login-icon" />
           <span className="login-text">Normal User</span>
+        </button>
+        <button className="login-button" onClick={() => login("MEDIC")}>
+          <FaUserMd className="login-icon" />
+          <span className="login-text">Medic</span>
         </button>
         <button className="login-button" onClick={() => login("DSP")}>
           <FaUserTie className="login-icon" />

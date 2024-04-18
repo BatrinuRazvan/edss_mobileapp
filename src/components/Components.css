@@ -1,83 +1,108 @@
 /* Components.css */
 
 .center-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    text-align: center;
-    position: relative;
-    width: 100%;
-}
-  
-.circle-button {
-  background-color: #007bff; /* Bootstrap primary color */
-  color: white;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  margin: 10px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  transition: all 0.5s ease-in-out;
-  position: relative; /* Ensures the transform-origin refers to the button itself */
+  height: 100vh;
+  text-align: center;
+  position: relative;
+  width: 100%;
+}
+
+.circle-button {
+background-color: #007bff; /* Bootstrap primary color */
+color: white;
+border: none;
+outline: none;
+cursor: pointer;
+width: 120px;
+height: 120px;
+border-radius: 50%;
+margin: 10px;
+display: flex;
+justify-content: center;
+align-items: center;
+transition: all 0.5s ease-in-out;
+position: relative; /* Ensures the transform-origin refers to the button itself */
 }
 
 .circle-button.full-screen {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(1);
-  transform-origin: center;
-  width: 100vw;
-  height: 100vh;
-  border-radius: 0;
-  z-index: 10;
-  animation: fillScreen 3.0s ease-in-out forwards;
+position: relative;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%) scale(1);
+width: 100vw;
+height: 100vh;
+border-radius: 0;
+z-index: 1000; /* Higher z-index to cover other content */
+background: rgba(17, 209, 252, 0.9); /* Adjust background color/transparency as needed */
+display: flex;
+align-items: center;
+justify-content: center;
+animation: expandToFill 1.5s ease-in-out forwards;
 }
 
 @keyframes expandToFill {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0; /* Start with a faded-out circle */
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(20); /* Scale to fill the screen */
-    opacity: 1; /* Fade in the full screen */
-    width: 100vw;
-    height: 100vh;
-    border-radius: 0; /* Transition to a rectangle */
-  }
+0% {
+  transform: translate(10%, 10%) scale(1);
+  opacity: 1;
+}
+50% {
+  transform: translate(-10%, -10%) scale(10);
+  opacity: 1;
+}
+100% {
+  transform: translate(-60%, -60%) scale(20);
+  opacity: 1;
+}
+}
+
+@keyframes iconFadeOut {
+from {
+  opacity: 1;
+}
+to {
+  opacity: 0;
+}
 }
 
 .circle-button:hover {
-  background-color: #0056b3; /* Darker shade for hover effect */
+background-color: #0056b3; /* Darker shade for hover effect */
+}
+
+.icon-transition {
+  transition: opacity 0.5s ease-out; /* Adjust timing as needed */
+}
+
+.scenario-content {
+  display: flex;
+  flex-direction: column;  /* Stack children vertically */
+  align-items: center;     /* Center-align children horizontally */
+  justify-content: center; /* Center-align children vertically */
+  width: 100%;             /* Ensure it spans the full width of the parent */
 }
 
 .button-text {
-  transition: opacity 0.3s ease-in-out;
+  margin-top: 5px; 
+  color: white; 
 }
 
-/* The fade-out and fade-in animations are for other elements */
 .fade-out {
-  animation: fadeOut 0.5s forwards;
+animation: fadeOut 0.5s forwards;
 }
 
 .fade-in {
-  animation: fadeIn 0.5s forwards;
+animation: fadeIn 0.5s forwards;
 }
 
 @keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
+from { opacity: 1; }
+to { opacity: 0; }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+from { opacity: 0; }
+to { opacity: 1; }
 }

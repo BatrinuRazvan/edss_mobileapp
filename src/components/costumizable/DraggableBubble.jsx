@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import "../Components.css";
 
 const DraggableBubble = ({
   scenario,
@@ -6,11 +7,21 @@ const DraggableBubble = ({
   initialPos,
   onClick,
   expand,
+  expandOnClick,
 }) => {
   const [position, setPosition] = useState(initialPos || { x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false); // Tracks whether the bubble is in its expanded state
   const [rel, setRel] = useState({ x: 0, y: 0 }); // Relative position of the cursor to the bubble
+  const [iconOpacity, setIconOpacity] = useState(1); // 1 means fully visible
+
+  useEffect(() => {
+    if (isExpanded) {
+      setIconOpacity(0); // Fade out icon
+    } else {
+      setIconOpacity(1); // Fade in icon
+    }
+  }, [isExpanded]);
 
   useEffect(() => {
     setIsExpanded(expand); // Listen to changes in `expand` prop to trigger expand animation
@@ -63,8 +74,10 @@ const DraggableBubble = ({
   // Modify this function to handle the onClick event, potentially for navigation or expanding
   const handleOnClick = (e) => {
     if (!isDragging) {
-      // Prevent navigation if dragging
       onClick(e);
+      if (expandOnClick) {
+        setIsExpanded(!isExpanded); // Toggle expansion
+      }
     }
   };
 
@@ -74,18 +87,21 @@ const DraggableBubble = ({
         isExpanded ? "full-screen" : ""
       }`}
       style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-        position: "absolute",
+        left: isExpanded ? 0 : `${position.x}px`,
+        top: isExpanded ? 0 : `${position.y}px`,
+        position: isExpanded ? "fixed" : "absolute",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        zIndex: isExpanded ? 1000 : 1,
       }}
-      onMouseDown={onMouseDown}
-      onClick={handleOnClick} // Use the modified click handler
+      onMouseDown={!isExpanded ? onMouseDown : null} // Disable dragging when expanded
+      onClick={handleOnClick}
     >
-      {children}
+      <div className="icon-transition" style={{ opacity: iconOpacity }}>
+        {children}
+      </div>
     </div>
   );
 };
