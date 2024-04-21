@@ -12,7 +12,7 @@ import CityMap from "./components/CityMap";
 import DSUpage from "./components/specialUsers/DSUpage";
 import DSPpage from "./components/specialUsers/DSPpage";
 import DisastersComponent from "./components/disasters/DisasterComponent";
-import Diagnostics from "./components/disasters/Diagnostics";
+import Diagnostics from "./components/diagnostics/Diagnostics";
 // Removed APIclient and NotificationPermission imports as they're no longer needed here
 
 function App() {

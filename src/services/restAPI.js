@@ -100,6 +100,18 @@ class APIclient {
       .post(this.endpoint, { userId })
       .then((res) => console.log(res.data));
   };
+
+  getAllStoredDiagnostics = () => {
+    return axiosInstance
+      .post(this.endpoint)
+      .then((res) => console.log(res.data));
+  };
+
+  getAllStoredSymptoms = (diagnosticName) => {
+    return axiosInstance
+      .post(this.endpoint, { diagnosticName })
+      .then((res) => console.log(res.data));
+  };
 }
 
 export default APIclient;

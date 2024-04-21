@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./ChatUi.css";
 import { FiSend } from "react-icons/fi";
 import botImage from "../logo512.png"; // Make sure the path is correct
-import medicQuestions from "./dataQuestions/medicQuestions"; // Adjust the path as necessary
-import diagnosticsQuestions from "./dataQuestions/diagnosticsQuestions";
+import medicQuestions from "./medicQuestions"; // Adjust the path as necessary
+import diagnosticsQuestions from "./diagnosticsQuestions";
 import LLMapi from "../../services/llmAPI";
 import { auth } from "../../services/firebase";
 import APIclient from "../../services/restAPI";
+import handleOptionClickHelper from "./handleOptionClickHelper";
 
 const Diagnostics = () => {
   const [messages, setMessages] = useState([]);
@@ -18,6 +19,7 @@ const Diagnostics = () => {
   const [currentQuestionId, setCurrentQuestionId] = useState(1);
   const [userInput, setUserInput] = useState("");
   const [questions, setQuestions] = useState(diagnosticsQuestions); // Default to diagnosticsQuestions
+  const [diagnostic, setDiagnostic] = useState("");
 
   useEffect(() => {
     const fetchUserTypeAndSetQuestions = async () => {
@@ -97,52 +99,18 @@ const Diagnostics = () => {
     setTimeout(() => typeCharByChar(text, 0), 100);
   };
 
-  const handleOptionClick = async (option) => {
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { sender: "user", text: option.text },
-    ]);
-
-    setUserResponses((prevResponses) => [
-      ...prevResponses,
-      { question: messages[messages.length - 1]?.text, response: option.text },
-    ]);
-
-    if (option.nextQuestionId) {
-      const nextQuestionId = option.nextQuestionId;
-      setCurrentQuestionId(nextQuestionId);
-      const nextQuestion = questions.find((q) => q.id === nextQuestionId);
-
-      if (nextQuestionId === 3) {
-        // Assume question 3 needs dynamic responses
-        const apiClient = new APIclient("/questions/options");
-        try {
-          const dynamicOptions = await apiClient.getQuestionOptions(
-            nextQuestionId
-          );
-          const updatedNextQuestion = {
-            ...nextQuestion,
-            options: dynamicOptions,
-          };
-          typeMessage(updatedNextQuestion.text);
-          setQuestions((prevQuestions) =>
-            prevQuestions.map((q) =>
-              q.id === nextQuestionId ? updatedNextQuestion : q
-            )
-          );
-        } catch (error) {
-          console.error("Failed to fetch dynamic options:", error);
-          typeMessage("Failed to retrieve options, please try again later.");
-        }
-      } else if (nextQuestion) {
-        typeMessage(nextQuestion.text);
-      } else {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { sender: "bot", text: "Thank you for your responses." },
-        ]);
-      }
-    }
+  const handleOptionClick = (option) => {
+    handleOptionClickHelper(
+      option,
+      currentQuestionId,
+      questions,
+      setMessages,
+      setUserResponses,
+      setCurrentQuestionId,
+      setQuestions,
+      typeMessage,
+      diagnostic
+    );
   };
 
   const sendAllResponses = useCallback(() => {
