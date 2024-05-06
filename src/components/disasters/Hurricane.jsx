@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./ChatUi.css";
 import botImage from "../logo512.png"; // Make sure the path is correct
 import APIclient from "../../services/restAPI";
+import questions from "./dataQuestions/hurricaneQuestions";
 
 const questions = [
   {
