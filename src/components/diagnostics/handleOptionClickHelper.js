@@ -60,7 +60,7 @@ const handleOptionClickHelper = async (
         ...prev,
         { question: "Custom Diagnostic", response: userInput },
       ]);
-      setCurrentQuestionId(6); // Transition to question 6
+      setCurrentQuestionId(4); // Transition to question 6
       typeMessage(userInput); // Echo the user input or provide follow-up
       setUserInput(""); // Clear input field
     } else if (nextQuestionId === 4) {
@@ -81,6 +81,32 @@ const handleOptionClickHelper = async (
         console.error("Failed to fetch dynamic options:", error);
         typeMessage("Failed to retrieve options, please try again later.");
       }
+    } else if (currentQuestionId === 6) {
+      const apiClient = new APIclient(
+        "/questions/incrementDiagnosticNumberByMedic"
+      );
+      const nrOfPacients = userInput;
+      try {
+        const dynamicOptions = await apiClient.incrementDiagnosticNumberByMedic(
+          diagnostic,
+          nrOfPacients
+        );
+        const updatedNextQuestion = {
+          ...nextQuestion,
+          options: dynamicOptions,
+        };
+        setCurrentQuestionId(5); // Transition to question 6
+        typeMessage(userInput); // Echo the user input or provide follow-up
+        setUserInput(""); // Clear input field
+      } catch (error) {
+        console.error("Failed to fetch dynamic options:", error);
+        typeMessage("Failed to retrieve options, please try again later.");
+      }
+    } else if (currentQuestionId === 51) {
+      const apiClient = new APIclient(
+        "/questions/incrementDiagnosticNumberByUser"
+      );
+      await apiClient.incrementDiagnosticNumberByMedic(diagnostic);
     } else if (nextQuestion) {
       typeMessage(nextQuestion.text);
     } else {

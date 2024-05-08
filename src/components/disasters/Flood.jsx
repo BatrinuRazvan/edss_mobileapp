@@ -99,7 +99,6 @@ const Flood = () => {
         typeMessage(nextQuestion.text);
       }
     } else {
-      // Handle the end of the conversation
       setMessages((prevMessages) => [
         ...prevMessages,
         { sender: "bot", text: "Thank you for your responses." },
@@ -133,7 +132,7 @@ const Flood = () => {
     setUserInput(e.target.value);
   };
 
-  const handleSendQuestion = async () => {
+  const handleUserLLMQuestion = async () => {
     if (userInput.trim() !== "") {
       // Directly display user's input immediately
       setMessages((prevMessages) => [
@@ -211,7 +210,7 @@ const Flood = () => {
               className="user-input"
             />
             <button
-              onClick={handleSendQuestion}
+              onClick={handleUserLLMQuestion}
               className={
                 userInput.trim() ? "send-button icon-only" : "send-button"
               }

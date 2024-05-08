@@ -112,6 +112,18 @@ class APIclient {
       .post(this.endpoint, { diagnosticName })
       .then((res) => console.log(res.data));
   };
+
+  incermentDiagnosticNumberMedic = (diagnosticName, nrOfPacients) => {
+    return axiosInstance
+      .post(this.endpoint, { diagnosticName, nrOfPacients })
+      .then((res) => console.log(res.data));
+  };
+
+  incermentDiagnosticNumberUser = (diagnosticName) => {
+    return axiosInstance
+      .post(this.endpoint, { diagnosticName })
+      .then((res) => console.log(res.data));
+  };
 }
 
 export default APIclient;

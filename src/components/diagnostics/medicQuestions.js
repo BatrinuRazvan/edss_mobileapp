@@ -49,20 +49,28 @@ const medicQuestions = [
     text: "Any other symptoms?",
     options: [
       { text: "Yes", nextQuestionId: 41 },
-      { text: "No", nextQuestionId: 5 },
+      { text: "No", nextQuestionId: 6 },
     ],
   },
   {
     id: 5,
     text: "Thank you for your cooperation! Do you have any other questions or diagnostics you want to update?",
     options: [
-      { text: "Yes", nextQuestionId: 111 },
+      { text: "Yes", nextQuestionId: 10 },
       { text: "No", nextQuestionId: null },
       { text: "Update Diagnostics", nextQuestionId: 2 },
     ],
   },
   {
-    id: 111,
+    id: 6,
+    text: "Please type in the amount of pacients with this diagnostic!",
+    options: [
+      { text: "Yes", nextQuestionId: null },
+      { text: "No", nextQuestionId: null },
+    ],
+  },
+  {
+    id: 10,
     text: "Type your questions below!",
     options: [
       { text: "Yes", nextQuestionId: null },

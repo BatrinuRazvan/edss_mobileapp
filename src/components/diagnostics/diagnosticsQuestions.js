@@ -52,19 +52,19 @@ const diagnosticsQuestions = [
     text: "Any other symptoms?",
     options: [
       { text: "Yes", nextQuestionId: 41 },
-      { text: "No", nextQuestionId: 5 },
+      { text: "No", nextQuestionId: 51 },
     ],
   },
   {
-    id: 5,
+    id: 51,
     text: "Thank you for your cooperation! Do you have any questions?",
     options: [
-      { text: "Yes", nextQuestionId: 111 },
+      { text: "Yes", nextQuestionId: 10 },
       { text: "No", nextQuestionId: null },
     ],
   },
   {
-    id: 111,
+    id: 10,
     text: "Please type your question below!",
     options: [
       { text: "Yes", nextQuestionId: null },

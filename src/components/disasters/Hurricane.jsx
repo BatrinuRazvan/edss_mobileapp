@@ -1,27 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./ChatUi.css";
+import { FiSend } from "react-icons/fi";
 import botImage from "../logo512.png"; // Make sure the path is correct
+import LLMapi from "../../services/llmAPI";
+import { auth } from "../../services/firebase";
 import APIclient from "../../services/restAPI";
 import questions from "./dataQuestions/hurricaneQuestions";
-
-const questions = [
-  {
-    id: 1,
-    text: "Are you experiencing an earthquake?",
-    options: [
-      { text: "Yes", nextQuestionId: 2 },
-      { text: "No", nextQuestionId: null },
-    ],
-  },
-  {
-    id: 2,
-    text: "Are you hurt?",
-    options: [
-      { text: "Yes", nextQuestionId: null },
-      { text: "No", nextQuestionId: null },
-    ],
-  },
-];
 
 const Hurricane = () => {
   const [messages, setMessages] = useState([]);
@@ -30,6 +14,8 @@ const Hurricane = () => {
   const [showBubble, setShowBubble] = useState(false); // Used to control the bubble display
   const messagesEndRef = useRef(null);
   const [showIcons, setShowIcons] = useState(false);
+  const [currentQuestionId, setCurrentQuestionId] = useState(1);
+  const [userInput, setUserInput] = useState("");
 
   useEffect(() => {
     let timeoutId;
@@ -76,7 +62,8 @@ const Hurricane = () => {
           ...prevMessages.slice(0, -1),
           typingMessage,
         ]);
-        setTimeout(() => typeCharByChar(msg, index + 1), 100);
+
+        setTimeout(() => typeCharByChar(msg, index + 1), 0);
       } else {
         // Typing completed
         setMessages((prevMessages) => [
@@ -86,35 +73,32 @@ const Hurricane = () => {
       }
     };
 
-    setTimeout(() => typeCharByChar(text, 0), 500);
+    setTimeout(() => typeCharByChar(text, 0), 100);
   };
 
   const handleOptionClick = (option) => {
-    // Add user's message to the state
+    // Add user's message and response to the state
     setMessages((prevMessages) => [
       ...prevMessages,
       { sender: "user", text: option.text },
     ]);
+
+    // Set user's response with the selected option
     setUserResponses((prevResponses) => [
       ...prevResponses,
       { question: messages[messages.length - 1]?.text, response: option.text },
     ]);
 
-    if (userResponses.length === 3) {
-      // This is where you'd have the user's email address
-      const userEmail = "user@example.com"; // Replace with the actual email
-      sendAllResponses(userEmail);
-    }
-
     if (option.nextQuestionId) {
+      setCurrentQuestionId(option.nextQuestionId); // Update the current question ID
+      console.log(currentQuestionId);
       const nextQuestion = questions.find(
         (q) => q.id === option.nextQuestionId
       );
       if (nextQuestion) {
-        typeMessage(nextQuestion.text); // Corrected the call to typeMessage
+        typeMessage(nextQuestion.text);
       }
     } else {
-      // Handle the end of the conversation
       setMessages((prevMessages) => [
         ...prevMessages,
         { sender: "bot", text: "Thank you for your responses." },
@@ -122,21 +106,58 @@ const Hurricane = () => {
     }
   };
 
-  const sendAllResponses = (email) => {
-    // Here you'd send the `userResponses` array to your backend
-    // Assuming your backend can handle an array of responses
-    const apiClient = new APIclient("/abc");
+  const sendAllResponses = useCallback(() => {
+    const userId = auth.currentUser?.uid;
+    if (!userId) {
+      console.error("No user logged in");
+      return;
+    }
+
+    const apiClient = new APIclient("/user/saveResponse"); // Adjust your endpoint as needed
     apiClient
-      .saveResponses(userResponses, email)
-      .then(() => {
-        console.log("All responses sent successfully!");
-      })
-      .catch((error) => {
-        console.error("Failed to send responses:", error);
-      });
+      .saveResponses(userId, userResponses) // Pass the userId instead of email
+      .then(() => console.log("All responses sent successfully!"))
+      .catch((error) => console.error("Failed to send responses:", error));
+  }, [userResponses]);
+
+  useEffect(() => {
+    if (currentQuestionId === 2 || currentQuestionId == 91) {
+      sendAllResponses();
+    }
+  }, [currentQuestionId, sendAllResponses]);
+
+  const llmAPI = new LLMapi();
+
+  const handleTextInputChange = (e) => {
+    setUserInput(e.target.value);
   };
 
-  const currentQuestion = questions.find((q) => q.id === 1);
+  const handleUserLLMQuestion = async () => {
+    if (userInput.trim() !== "") {
+      // Directly display user's input immediately
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: "user", text: userInput },
+      ]);
+
+      try {
+        const llmResponse = await llmAPI.sendToAnswer(userInput);
+        const responseText = llmResponse.response;
+
+        // Use typeMessage to display the bot's response with the typing effect
+        typeMessage(responseText);
+
+        setUserInput(""); // Clear the input field after sending
+      } catch (error) {
+        console.error("Error fetching response from LLM:", error);
+
+        // Use typeMessage to display an error message from the bot with the typing effect
+        typeMessage("Sorry, I'm having trouble finding an answer right now.");
+      }
+    }
+  };
+
+  const currentQuestion = questions.find((q) => q.id === currentQuestionId);
 
   return (
     <div className="chat-container">
@@ -170,13 +191,32 @@ const Hurricane = () => {
           ))}
           <div ref={messagesEndRef} />
         </div>
-        {currentQuestion && (
+        {currentQuestionId !== 10 && currentQuestion && (
           <div className="options-container">
             {currentQuestion.options.map((option, index) => (
               <button key={index} onClick={() => handleOptionClick(option)}>
                 {option.text}
               </button>
             ))}
+          </div>
+        )}
+        {currentQuestionId === 10 && (
+          <div className="input-send-container">
+            <input
+              type="text"
+              value={userInput}
+              onChange={handleTextInputChange}
+              placeholder="Use this field to..."
+              className="user-input"
+            />
+            <button
+              onClick={handleUserLLMQuestion}
+              className={
+                userInput.trim() ? "send-button icon-only" : "send-button"
+              }
+            >
+              {userInput.trim() ? <FiSend size={24} /> : "Type you question!"}
+            </button>
           </div>
         )}
       </div>

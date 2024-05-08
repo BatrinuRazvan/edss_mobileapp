@@ -1,10 +1,10 @@
 const questions = [
   {
     id: 1,
-    text: "Is there any flood danger?",
+    text: "Are you currently caught up in a flood?",
     options: [
-      { text: "Yes", nextQuestionId: 11 },
-      { text: "No", nextQuestionId: null },
+      { text: "Yes", nextQuestionId: 111 },
+      { text: "No", nextQuestionId: 11 },
     ],
   },
   {
@@ -17,10 +17,10 @@ const questions = [
   },
   {
     id: 11,
-    text: "Is the flood ongoing?",
+    text: "Is there a flood incoming?",
     options: [
       { text: "Yes", nextQuestionId: 111 },
-      { text: "No", nextQuestionId: null },
+      { text: "No", nextQuestionId: 10 },
     ],
   },
   {
