@@ -49,20 +49,18 @@ const handleOptionClickHelper = async (
       }
     }
     if (currentQuestionId === 3 && option.text === "Other") {
-      // Special case for "Other" in question 3
-      setCurrentQuestionId(31); // Set ID to a custom input step
+      setCurrentQuestionId(31); 
       typeMessage("Please type your diagnostic:");
     }
     if (currentQuestionId === 31) {
-      // Handling custom input when the question ID is 5
       setDiagnostic(userInput);
       setUserResponses((prev) => [
         ...prev,
         { question: "Custom Diagnostic", response: userInput },
       ]);
-      setCurrentQuestionId(4); // Transition to question 6
-      typeMessage(userInput); // Echo the user input or provide follow-up
-      setUserInput(""); // Clear input field
+      setCurrentQuestionId(4); 
+      typeMessage(userInput); 
+      setUserInput(""); 
     } else if (nextQuestionId === 4) {
       const apiClient = new APIclient("/questions/getAllStoredSymptoms");
       try {
@@ -95,9 +93,9 @@ const handleOptionClickHelper = async (
           ...nextQuestion,
           options: dynamicOptions,
         };
-        setCurrentQuestionId(5); // Transition to question 6
-        typeMessage(userInput); // Echo the user input or provide follow-up
-        setUserInput(""); // Clear input field
+        setCurrentQuestionId(5);
+        typeMessage(userInput); 
+        setUserInput(""); 
       } catch (error) {
         console.error("Failed to fetch dynamic options:", error);
         typeMessage("Failed to retrieve options, please try again later.");
