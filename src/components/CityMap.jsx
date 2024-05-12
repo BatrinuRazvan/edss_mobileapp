@@ -87,12 +87,16 @@ function CityMap() {
           status === google.maps.places.PlacesServiceStatus.OK &&
           results[0]
         ) {
-          setNavigationDestination(results[0].geometry.location); // Set for navigation
+          const locNow = {
+            lat: results[0].geometry.viewport.Wh.hi,
+            lng: results[0].geometry.viewport.Gh.hi,
+          };
+          setNavigationDestination(locNow);
           planRoute(
             center,
             results[0].geometry.location,
             google.maps.TravelMode.DRIVING
-          ); // Example: Driving to hospital
+          );
         } else {
           console.error("No hospitals found");
         }

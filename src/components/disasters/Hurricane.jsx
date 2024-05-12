@@ -121,7 +121,7 @@ const Hurricane = () => {
   }, [userResponses]);
 
   useEffect(() => {
-    if (currentQuestionId === 2 || currentQuestionId == 91) {
+    if (currentQuestionId === 2 || currentQuestionId === 91) {
       sendAllResponses();
     }
   }, [currentQuestionId, sendAllResponses]);

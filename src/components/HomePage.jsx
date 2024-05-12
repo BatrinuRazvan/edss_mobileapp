@@ -7,6 +7,7 @@ import APIclient from "../services/restAPI"; // Adjust based on your actual path
 import DraggableBubble from "./costumizable/DraggableBubble";
 import NavBar from "./costumizable/NavBar";
 import { MdNotifications, MdMap, MdHealing, MdWarning } from "react-icons/md";
+import { FaUserSecret, FaUserTie } from "react-icons/fa";
 
 // Assuming urlBase64ToUint8Array function is moved to a utility file or kept here
 function urlBase64ToUint8Array(base64String) {
@@ -66,13 +67,19 @@ const HomePage = () => {
   const [userType, setUserType] = useState("");
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      // Make the callback async
       if (user) {
         console.log("User logged in:", user);
         askForNotificationPermission(user);
+
         const apiclient = new APIclient("/user/getUserType");
-        const storedUserType = apiclient.getUserType(user.uid); // Retrieve userType from localStorage
-        setUserType(storedUserType);
+        try {
+          const storedUserType = await apiclient.getUserType(user.uid); // Await the async call
+          setUserType(storedUserType);
+        } catch (error) {
+          console.error("Error fetching user type:", error);
+        }
       } else {
         navigate("/login");
       }
@@ -111,10 +118,24 @@ const HomePage = () => {
     },
     { id: "map", diameter: 100, minimumSeparation: 10, icon: <MdMap /> },
     ...(userType === "DSU"
-      ? [{ id: "dsu", diameter: 100, minimumSeparation: 10 }]
+      ? [
+          {
+            id: "DSU",
+            diameter: 100,
+            minimumSeparation: 10,
+            icon: <FaUserTie />,
+          },
+        ]
       : []),
     ...(userType === "DSP"
-      ? [{ id: "dsp", diameter: 100, minimumSeparation: 10 }]
+      ? [
+          {
+            id: "DSP",
+            diameter: 100,
+            minimumSeparation: 10,
+            icon: <FaUserSecret />,
+          },
+        ]
       : []),
   ];
 
@@ -155,7 +176,9 @@ const HomePage = () => {
             expandOnClick={
               scenario.id === "map" ||
               scenario.id === "diagnostics" ||
-              scenario.id === "notifications"
+              scenario.id === "notifications" ||
+              scenario.id === "DSP" ||
+              scenario.id === "DSU"
             }
             className={`scenario-bubble ${scenario.id} ${
               expand[scenario.id] ? "expand" : ""

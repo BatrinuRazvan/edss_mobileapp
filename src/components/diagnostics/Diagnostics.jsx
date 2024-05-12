@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import "./ChatUi.css";
+import "../disasters/ChatUi.css";
 import { FiSend } from "react-icons/fi";
-import botImage from "../logo512.png"; // Make sure the path is correct
-import medicQuestions from "./medicQuestions"; // Adjust the path as necessary
+import botImage from "../logo512.png";
+import medicQuestions from "./medicQuestions";
 import diagnosticsQuestions from "./diagnosticsQuestions";
 import LLMapi from "../../services/llmAPI";
 import { auth } from "../../services/firebase";
@@ -13,17 +13,18 @@ const Diagnostics = () => {
   const [messages, setMessages] = useState([]);
   const [userResponses, setUserResponses] = useState([]);
   const [animationStep, setAnimationStep] = useState("flyingIn");
-  const [showBubble, setShowBubble] = useState(false); // Used to control the bubble display
+  const [showBubble, setShowBubble] = useState(false);
   const messagesEndRef = useRef(null);
   const [showIcons, setShowIcons] = useState(false);
   const [currentQuestionId, setCurrentQuestionId] = useState(1);
   const [userInput, setUserInput] = useState("");
-  const [questions, setQuestions] = useState(diagnosticsQuestions); // Default to diagnosticsQuestions
+  const [questions, setQuestions] = useState(diagnosticsQuestions);
   const [diagnostic, setDiagnostic] = useState("");
+  const [symptoms, setSymptoms] = useState([]);
 
   useEffect(() => {
     const fetchUserTypeAndSetQuestions = async () => {
-      const userId = auth.currentUser?.uid; // Ensure you have a user ID
+      const userId = auth.currentUser?.uid;
       if (userId) {
         const apiClient = new APIclient("/user/getUserType");
         const userType = await apiClient.getUserType(userId);
@@ -31,13 +32,11 @@ const Diagnostics = () => {
           userType === "MEDIC" ? medicQuestions : diagnosticsQuestions
         );
       } else {
-        // Handle scenario where no user is logged in or user ID is not available
         console.log("No user ID found or user not logged in.");
       }
     };
 
     fetchUserTypeAndSetQuestions();
-    // No dependencies needed as this effect only needs to run once on mount
   }, []);
 
   useEffect(() => {
@@ -52,7 +51,7 @@ const Diagnostics = () => {
       case "shrinkAndMove":
         timeoutId = setTimeout(() => {
           setShowBubble(true);
-          setShowIcons(true); // Enable the icons to be shown after the animations
+          setShowIcons(true);
         }, 1000);
         break;
       default:
@@ -61,6 +60,12 @@ const Diagnostics = () => {
 
     return () => clearTimeout(timeoutId);
   }, [animationStep]);
+
+  // useEffect(() => {
+  //   if (diagnostic !== "") {
+  //     console.log("New diagnostic is set:", diagnostic);
+  //   }
+  // }, [diagnostic]);
 
   useEffect(() => {
     const firstQuestion = questions.find((q) => q.id === 1);
@@ -74,7 +79,6 @@ const Diagnostics = () => {
   }, [messages]);
 
   const typeMessage = (text) => {
-    // Initial typing indicator message
     let typingMessage = { sender: "bot", text: "", isTyping: true };
     setMessages((prevMessages) => [...prevMessages, typingMessage]);
 
@@ -88,7 +92,6 @@ const Diagnostics = () => {
 
         setTimeout(() => typeCharByChar(msg, index + 1), 0);
       } else {
-        // Typing completed
         setMessages((prevMessages) => [
           ...prevMessages.slice(0, -1),
           { ...typingMessage, isTyping: false },
@@ -103,13 +106,20 @@ const Diagnostics = () => {
     handleOptionClickHelper(
       option,
       currentQuestionId,
+      option.nextQuestionId,
       questions,
+      messages,
       setMessages,
       setUserResponses,
       setCurrentQuestionId,
       setQuestions,
       typeMessage,
-      diagnostic
+      diagnostic,
+      setDiagnostic,
+      userInput,
+      setUserInput,
+      symptoms,
+      setSymptoms
     );
   };
 
@@ -120,9 +130,9 @@ const Diagnostics = () => {
       return;
     }
 
-    const apiClient = new APIclient("/user/saveResponse"); // Adjust your endpoint as needed
+    const apiClient = new APIclient("/user/saveResponse");
     apiClient
-      .saveResponses(userId, userResponses) // Pass the userId instead of email
+      .saveResponses(userId, userResponses)
       .then(() => console.log("All responses sent successfully!"))
       .catch((error) => console.error("Failed to send responses:", error));
   }, [userResponses]);
@@ -141,7 +151,6 @@ const Diagnostics = () => {
 
   const handleSendQuestion = async () => {
     if (userInput.trim() !== "") {
-      // Directly display user's input immediately
       setMessages((prevMessages) => [
         ...prevMessages,
         { sender: "user", text: userInput },
@@ -151,14 +160,11 @@ const Diagnostics = () => {
         const llmResponse = await llmAPI.sendToAnswer(userInput);
         const responseText = llmResponse.response;
 
-        // Use typeMessage to display the bot's response with the typing effect
         typeMessage(responseText);
 
-        setUserInput(""); // Clear the input field after sending
+        setUserInput("");
       } catch (error) {
         console.error("Error fetching response from LLM:", error);
-
-        // Use typeMessage to display an error message from the bot with the typing effect
         typeMessage("Sorry, I'm having trouble finding an answer right now.");
       }
     }
@@ -183,37 +189,41 @@ const Diagnostics = () => {
         }`}
         style={{ backgroundImage: `url(${botImage})` }}
       />
-      {showBubble && <div className="bubble" />}{" "}
-      {/* The bubble is now conditional on showBubble being true */}
+      {showBubble && <div className="bubble" />}
       <div id="messageList">
         <div className="messages">
-          {messages.map((message, index) => (
-            <div key={index} className={`message ${message.sender}`}>
-              {message.sender === "bot" &&
-                showIcons && ( // Only show the icon if showIcons is true
-                  <div className="message-icon"></div>
-                )}
-              <div className="message-content">{message.text}</div>
-            </div>
-          ))}
+          {messages.map(
+            (message, index) =>
+              message.text && (
+                <div key={index} className={`message ${message.sender}`}>
+                  {message.sender === "bot" && showIcons && (
+                    <div className="message-icon"></div>
+                  )}
+                  <div className="message-content">{message.text}</div>
+                </div>
+              )
+          )}
           <div ref={messagesEndRef} />
         </div>
-        {currentQuestionId !== 10 && currentQuestion && (
-          <div className="options-container">
-            {currentQuestion.options.map((option, index) => (
-              <button key={index} onClick={() => handleOptionClick(option)}>
-                {option.text}
-              </button>
-            ))}
-          </div>
-        )}
+        {currentQuestionId !== 10 &&
+          currentQuestionId !== 31 &&
+          currentQuestionId !== 41 &&
+          currentQuestion && (
+            <div className="options-container">
+              {currentQuestion.options.map((option, index) => (
+                <button key={index} onClick={() => handleOptionClick(option)}>
+                  {option.text}
+                </button>
+              ))}
+            </div>
+          )}
         {currentQuestionId === 10 && (
           <div className="input-send-container">
             <input
               type="text"
               value={userInput}
               onChange={handleTextInputChange}
-              placeholder="Use this field to..."
+              placeholder="Type your question here..."
               className="user-input"
             />
             <button
@@ -222,7 +232,26 @@ const Diagnostics = () => {
                 userInput.trim() ? "send-button icon-only" : "send-button"
               }
             >
-              {userInput.trim() ? <FiSend size={24} /> : "Type you question!"}
+              {userInput.trim() ? <FiSend size={24} /> : "Type your question!"}
+            </button>
+          </div>
+        )}
+        {(currentQuestionId === 31 || currentQuestionId === 41) && (
+          <div className="input-send-container">
+            <input
+              type="text"
+              value={userInput}
+              onChange={handleTextInputChange}
+              placeholder="Type your question here..."
+              className="user-input"
+            />
+            <button
+              onClick={() => handleOptionClick(userInput)}
+              className={
+                userInput.trim() ? "send-button icon-only" : "send-button"
+              }
+            >
+              {userInput.trim() ? <FiSend size={24} /> : "Type your question!"}
             </button>
           </div>
         )}

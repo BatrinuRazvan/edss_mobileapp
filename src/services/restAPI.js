@@ -96,32 +96,53 @@ class APIclient {
   };
 
   getUserType = (userId) => {
+    const queryParams = new URLSearchParams({
+      userId: userId,
+    }).toString();
     return axiosInstance
-      .post(this.endpoint, { userId })
-      .then((res) => console.log(res.data));
+      .get(`/user/getUserType?${queryParams}`)
+      .then((response) => response.data);
   };
 
   getAllStoredDiagnostics = () => {
+    return axiosInstance.get(this.endpoint).then((res) => res.data);
+  };
+
+  getAllStoredSymptoms = (diagnostic) => {
+    const queryParams = new URLSearchParams({
+      diagnostic: diagnostic,
+    }).toString();
     return axiosInstance
-      .post(this.endpoint)
+      .get(`/questions/getAllStoredSymptoms?${queryParams}`)
+      .then((response) => response.data);
+  };
+
+  incermentDiagnosticNumberMedic = (diagnostic, nrOfPacients) => {
+    return axiosInstance
+      .post(this.endpoint, diagnostic, nrOfPacients)
       .then((res) => console.log(res.data));
   };
 
-  getAllStoredSymptoms = (diagnosticName) => {
+  incermentDiagnosticNumberUser = (diagnostic) => {
     return axiosInstance
-      .post(this.endpoint, { diagnosticName })
+      .post(this.endpoint, diagnostic)
       .then((res) => console.log(res.data));
   };
 
-  incermentDiagnosticNumberMedic = (diagnosticName, nrOfPacients) => {
+  saveDiagnostic = (diagnostic) => {
     return axiosInstance
-      .post(this.endpoint, { diagnosticName, nrOfPacients })
+      .post(this.endpoint, diagnostic)
       .then((res) => console.log(res.data));
   };
 
-  incermentDiagnosticNumberUser = (diagnosticName) => {
+  saveSymptoms = (diagnostic, symptoms) => {
+    console.log(symptoms);
+    const queryParams = new URLSearchParams({
+      diagnostic: diagnostic,
+      symptoms: symptoms,
+    }).toString();
     return axiosInstance
-      .post(this.endpoint, { diagnosticName })
+      .post(`${this.endpoint}?${queryParams}`)
       .then((res) => console.log(res.data));
   };
 }
