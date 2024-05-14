@@ -139,12 +139,22 @@ const HomePage = () => {
       : []),
   ];
 
-  const initialPositions = scenarios.map((_, index) => {
-    const angle = (index / scenarios.length) * 2 * Math.PI;
-    return {
-      x: containerCenter.x + circleRadius * Math.cos(angle) - 50,
-      y: containerCenter.y + circleRadius * Math.sin(angle) - 50,
-    };
+  // Compute positions for four primary bubbles and center position for the fifth
+  const initialPositions = scenarios.map((scenario, index, array) => {
+    if (
+      array.length === 5 &&
+      (scenario.id === "DSU" || scenario.id === "DSP")
+    ) {
+      // Center position for the fifth bubble
+      return { x: containerCenter.x - 50, y: containerCenter.y - 50 };
+    } else {
+      // Calculate positions for the other four bubbles
+      const angle = (index / 4) * 2 * Math.PI; // Always base on four main scenarios
+      return {
+        x: containerCenter.x + circleRadius * Math.cos(angle) - 50,
+        y: containerCenter.y + circleRadius * Math.sin(angle) - 50,
+      };
+    }
   });
 
   const [animationClass, setAnimationClass] = useState("");

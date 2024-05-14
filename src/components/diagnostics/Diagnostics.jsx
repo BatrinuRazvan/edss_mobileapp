@@ -25,14 +25,24 @@ const Diagnostics = () => {
   useEffect(() => {
     const fetchUserTypeAndSetQuestions = async () => {
       const userId = auth.currentUser?.uid;
-      if (userId) {
-        const apiClient = new APIclient("/user/getUserType");
-        const userType = await apiClient.getUserType(userId);
-        setQuestions(
-          userType === "MEDIC" ? medicQuestions : diagnosticsQuestions
-        );
-      } else {
+      if (!userId) {
         console.log("No user ID found or user not logged in.");
+        return;
+      }
+
+      const apiClient = new APIclient("/user/getUserType");
+      try {
+        const userType = await apiClient.getUserType(userId);
+        const selectedQuestions =
+          userType === "MEDIC" ? medicQuestions : diagnosticsQuestions;
+        setQuestions(selectedQuestions);
+        // Set the first question after confirming the correct question set
+        const firstQuestion = selectedQuestions.find((q) => q.id === 1);
+        if (firstQuestion) {
+          setMessages([{ sender: "bot", text: firstQuestion.text }]);
+        }
+      } catch (error) {
+        console.error("Error fetching user type:", error);
       }
     };
 
@@ -62,17 +72,11 @@ const Diagnostics = () => {
   }, [animationStep]);
 
   // useEffect(() => {
-  //   if (diagnostic !== "") {
-  //     console.log("New diagnostic is set:", diagnostic);
+  //   const firstQuestion = questions.find((q) => q.id === 1);
+  //   if (firstQuestion && messages.length === 0) {
+  //     setMessages([{ sender: "bot", text: firstQuestion.text }]);
   //   }
-  // }, [diagnostic]);
-
-  useEffect(() => {
-    const firstQuestion = questions.find((q) => q.id === 1);
-    if (firstQuestion && messages.length === 0) {
-      setMessages([{ sender: "bot", text: firstQuestion.text }]);
-    }
-  }, [messages.length, questions]);
+  // }, [messages.length, questions]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

@@ -9,13 +9,24 @@ const GeneralNotifications = () => {
     const fetchMessages = async () => {
       const apiClient = new APIclient("/messages/getMessages");
       const data = await apiClient.getMessages();
-      setMessages(data);
+      const capitalizedData = data.map((message) => ({
+        ...message,
+        title: capitalizeFirstLetter(message.title),
+        description: capitalizeFirstLetter(message.description),
+        city: capitalizeFirstLetter(message.city),
+        severity: capitalizeFirstLetter(message.severity),
+      }));
+      setMessages(capitalizedData);
     };
     fetchMessages();
   }, []);
 
   const handleExpandMessage = (id) => {
     setExpandedMessageId(expandedMessageId === id ? null : id);
+  };
+
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
   return (
@@ -40,9 +51,15 @@ const GeneralNotifications = () => {
             </h3>
             {expandedMessageId === message.id && (
               <div>
-                <p>{message.description}</p>
-                <p>Severity: {message.severity}</p>
-                <p>Range: {message.rangekm} km</p>
+                <p>
+                  <b>Description:</b> {message.description}
+                </p>
+                <p>
+                  <b>Severity:</b> {message.severity}
+                </p>
+                <p>
+                  <b>Range:</b> {message.range} km
+                </p>
               </div>
             )}
           </div>

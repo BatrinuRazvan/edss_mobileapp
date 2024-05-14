@@ -15,7 +15,14 @@ const LocalNotifications = () => {
         const apiClient = new APIclient("/messages/getLocalMessages");
         try {
           const data = await apiClient.getLocalMessages(location);
-          setMessages(data);
+          const capitalizedData = data.map((message) => ({
+            ...message,
+            title: capitalizeFirstLetter(message.title),
+            description: capitalizeFirstLetter(message.description),
+            city: capitalizeFirstLetter(message.city),
+            severity: capitalizeFirstLetter(message.severity),
+          }));
+          setMessages(capitalizedData);
         } catch (error) {
           console.error("Error fetching local messages:", error);
           alert("Error obtaining local notifications.");
@@ -31,6 +38,10 @@ const LocalNotifications = () => {
 
   const handleExpandMessage = (id) => {
     setExpandedMessageId(expandedMessageId === id ? null : id);
+  };
+
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
   return (
@@ -56,9 +67,15 @@ const LocalNotifications = () => {
               </h3>
               {expandedMessageId === message.id && (
                 <div>
-                  <p>{message.description}</p>
-                  <p>Severity: {message.severity}</p>
-                  <p>Range: {message.rangekm} km</p>
+                  <p>
+                    <b>Description:</b> {message.description}
+                  </p>
+                  <p>
+                    <b>Severity:</b> {message.severity}
+                  </p>
+                  <p>
+                    <b>Range:</b> {message.range} km
+                  </p>
                 </div>
               )}
             </div>
