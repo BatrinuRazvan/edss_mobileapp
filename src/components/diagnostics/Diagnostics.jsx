@@ -212,6 +212,7 @@ const Diagnostics = () => {
         {currentQuestionId !== 10 &&
           currentQuestionId !== 31 &&
           currentQuestionId !== 41 &&
+          currentQuestionId !== 6 &&
           currentQuestion && (
             <div className="options-container">
               {currentQuestion.options.map((option, index) => (
@@ -240,7 +241,9 @@ const Diagnostics = () => {
             </button>
           </div>
         )}
-        {(currentQuestionId === 31 || currentQuestionId === 41) && (
+        {(currentQuestionId === 31 ||
+          currentQuestionId === 41 ||
+          currentQuestionId === 6) && (
           <div className="input-send-container">
             <input
               type="text"
