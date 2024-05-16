@@ -5,7 +5,7 @@ import Earthquake from "./components/disasters/Earthquake";
 import Epidemic from "./components/disasters/Epidemic";
 import Hurricane from "./components/disasters/Hurricane";
 import Notifications from "./components/notifications/Notifications";
-import Permissions from "./components/notifications/Permissions";
+import ManageAccount from "./components/notifications/ManageAccount";
 import Login from "./components/Login";
 import Flood from "./components/disasters/Flood";
 import CityMap from "./components/CityMap";
@@ -44,12 +44,12 @@ function App() {
         <Route path="/hurricane" element={<Hurricane />} />
         <Route path="/flood" element={<Flood />} />
         <Route path="/notifications/*" element={<Notifications />} />
-        <Route path="/permissions" element={<Permissions />} />
         <Route path="/map" element={<CityMap />} />
         <Route path="/dsu" element={<DSUpage />} />
         <Route path="/dsp" element={<DSPpage />} />
         <Route path="/disasters" element={<DisastersComponent />} />
         <Route path="/diagnostics" element={<Diagnostics />} />
+        <Route path="/manageaccount" element={<ManageAccount />} />
       </Routes>
     </Router>
   );
