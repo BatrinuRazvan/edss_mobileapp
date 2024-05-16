@@ -18,9 +18,8 @@ const defaultCenter = { lat: -34.397, lng: 150.644 }; // Adjust based on your lo
 function CityMap() {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyBKzmMGdz_ea-eD2QKEBXKKVNajny9lTtw", // Replace with your actual API key
-    libraries: ["maps", "marker", "places"],
-    mapIds: ["9787198eba5dffae"],
+    googleMapsApiKey: process.env.REACT_APP_MAPS_API_KEY, // Replace with your actual API key
+    libraries: ["places"],
   });
 
   const [map, setMap] = useState(null);
@@ -75,33 +74,46 @@ function CityMap() {
 
     clearDirectionsAndDestination();
 
-    const service = new google.maps.places.PlacesService(map);
-    service.nearbySearch(
-      {
-        location: center,
-        radius: "5000",
-        type: ["hospital"],
-      },
-      (results, status) => {
-        if (
-          status === google.maps.places.PlacesServiceStatus.OK &&
-          results[0]
-        ) {
-          const locNow = {
-            lat: results[0].geometry.viewport.Wh.hi,
-            lng: results[0].geometry.viewport.Gh.hi,
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
           };
-          setNavigationDestination(locNow);
-          planRoute(
-            center,
-            results[0].geometry.location,
-            google.maps.TravelMode.DRIVING
+
+          setCenter(userLocation);
+          map.panTo(userLocation);
+
+          const service = new google.maps.places.PlacesService(map);
+          service.nearbySearch(
+            {
+              location: userLocation,
+              radius: "5000",
+              type: ["hospital"],
+            },
+            (results, status) => {
+              if (
+                status === google.maps.places.PlacesServiceStatus.OK &&
+                results[0]
+              ) {
+                const locNow = {
+                  lat: results[0].geometry.location.lat(),
+                  lng: results[0].geometry.location.lng(),
+                };
+                setNavigationDestination(locNow);
+                planRoute(userLocation, locNow, google.maps.TravelMode.DRIVING);
+              } else {
+                console.error("No hospitals found");
+              }
+            }
           );
-        } else {
-          console.error("No hospitals found");
+        },
+        (error) => {
+          console.error("Error obtaining location", error);
         }
-      }
-    );
+      );
+    }
   };
 
   const routeToNearestExit = async () => {
@@ -109,15 +121,32 @@ function CityMap() {
 
     clearDirectionsAndDestination();
 
-    // Example: Predefined exit point. Replace with actual logic for finding nearest exit.
-    const apiClient = new APIclient();
-    const cityMarker = await apiClient.getNearestExit(center);
-    const exitLocation = {
-      lat: cityMarker.latitude,
-      lng: cityMarker.longitude,
-    };
-    setNavigationDestination(exitLocation); // Set for navigation
-    planRoute(center, exitLocation, google.maps.TravelMode.DRIVING); // Example: Driving to exit
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+
+          setCenter(userLocation);
+          map.panTo(userLocation);
+
+          // Example: Predefined exit point. Replace with actual logic for finding nearest exit.
+          const apiClient = new APIclient();
+          const cityMarker = await apiClient.getNearestExit(userLocation);
+          const exitLocation = {
+            lat: cityMarker.latitude,
+            lng: cityMarker.longitude,
+          };
+          setNavigationDestination(exitLocation); // Set for navigation
+          planRoute(userLocation, exitLocation, google.maps.TravelMode.DRIVING); // Example: Driving to exit
+        },
+        (error) => {
+          console.error("Error obtaining location", error);
+        }
+      );
+    }
   };
 
   const planRoute = (origin, destination, travelMode) => {
@@ -144,7 +173,9 @@ function CityMap() {
     // Directly use the lat and lng properties if navigationDestination is a plain object.
     const destination = `${navigationDestination.lat},${navigationDestination.lng}`;
     const mode =
-      travelMode === google.maps.TravelMode.DRIVING ? "driving" : "walking";
+      travelMode === "DRIVING"
+        ? google.maps.TravelMode.DRIVING
+        : google.maps.TravelMode.WALKING;
     window.open(
       `https://www.google.com/maps/dir/?api=1&destination=${destination}&travelmode=${mode}`,
       "_blank"

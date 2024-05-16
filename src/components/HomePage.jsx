@@ -45,8 +45,7 @@ const askForNotificationPermission = (user) => {
 };
 
 const subscribeUserToPush = (user, registration) => {
-  const publicKey =
-    "BGAUGfksW8MR0puO1T-LQuzYRNjmfLrwG9-PStRYckwEU3zVI3P60QOfsY6MoF82zwgqQpHUiLXBlsW425fh6no"; // Use your VAPID public key
+  const publicKey = process.env.REACT_APP_PUBLIC_VAPID_KEY; // Use your VAPID public key
   registration.pushManager
     .subscribe({
       userVisibleOnly: true,
@@ -67,7 +66,7 @@ const HomePage = () => {
   const [userType, setUserType] = useState("");
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    const subscribe = onAuthStateChanged(auth, async (user) => {
       // Make the callback async
       if (user) {
         console.log("User logged in:", user);
@@ -77,6 +76,22 @@ const HomePage = () => {
         try {
           const storedUserType = await apiclient.getUserType(user.uid); // Await the async call
           setUserType(storedUserType);
+          if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+              async (position) => {
+                const { latitude, longitude } = position.coords;
+                console.log(user.uid);
+                console.log(latitude);
+                const apiClient = new APIclient("/user/updateLocation");
+                await apiClient.updateLocation(user.uid, latitude, longitude);
+              },
+              (error) => {
+                console.error("Error obtaining location", error);
+              }
+            );
+          } else {
+            console.log("Geolocation is not supported by this browser.");
+          }
         } catch (error) {
           console.error("Error fetching user type:", error);
         }
@@ -85,7 +100,7 @@ const HomePage = () => {
       }
     });
 
-    return () => unsubscribe();
+    return () => subscribe();
   }, [navigate]);
 
   const navigateToScenario = (scenarioId) => {

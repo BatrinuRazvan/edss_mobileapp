@@ -1,7 +1,6 @@
 import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
 
-GlobalWorkerOptions.workerSrc =
-  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js";
+GlobalWorkerOptions.workerSrc = process.env.PDF_PARSER_WORKER;
 const parsePDF = async (file) => {
   try {
     const fileReader = new FileReader();

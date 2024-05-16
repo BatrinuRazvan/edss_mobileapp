@@ -63,6 +63,9 @@ const NavBar = () => {
           Notifications
         </button>
         <button onClick={() => navigateToPage("map")}>Map</button>
+        <button onClick={() => navigateToPage("manageaccount")}>
+          Manage account
+        </button>
       </div>
       {isMenuOpen && (
         <div className="backdrop" onClick={() => setIsMenuOpen(false)} />

@@ -28,13 +28,16 @@ class APIclient {
       .then((response) => response.data);
   };
 
-  updateLocation = ({ userId, latitude, longitude }) => {
-    const params = new URLSearchParams();
-    params.append("userId", userId);
-    params.append("latitude", latitude);
-    params.append("longitude", longitude);
+  updateLocation = (userId, latitude, longitude) => {
+    const params = new URLSearchParams({
+      userId: userId,
+      latitude: latitude,
+      longitude: longitude,
+    }).toString();
+    console.log(params);
+    console.log(userId);
     return axiosInstance
-      .post(`${this.endpoint}`, params)
+      .post(`${this.endpoint}?${params}`)
       .then((res) => console.log("Location saved:", res.data))
       .catch((err) => console.error("Saving location failed:", err));
   };
