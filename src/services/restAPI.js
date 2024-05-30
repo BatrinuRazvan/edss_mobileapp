@@ -121,8 +121,12 @@ class APIclient {
   };
 
   incermentDiagnosticNumberMedic = (diagnostic, nrOfPacients) => {
+    const queryParams = new URLSearchParams({
+      diagnostic: diagnostic,
+      numberOfDiagnostics: nrOfPacients,
+    }).toString();
     return axiosInstance
-      .post(this.endpoint, diagnostic, nrOfPacients)
+      .post(`${this.endpoint}?${queryParams}`)
       .then((res) => console.log(res.data));
   };
 

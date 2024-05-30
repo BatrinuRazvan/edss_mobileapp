@@ -142,9 +142,14 @@ const handleOptionClickHelper = async (
     );
     try {
       await apiClient.incermentDiagnosticNumberMedic(diagnostic, userInput);
-      setCurrentQuestionId(5);
-      typeMessage(userInput);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: "user", text: userInput },
+      ]);
       setUserInput("");
+      const nextQuestion = questions.find((q) => q.id === 5);
+      typeMessage(nextQuestion.text);
+      setCurrentQuestionId(5);
     } catch (error) {
       console.error("Failed to increment diagnostic number by medic:", error);
       typeMessage(
