@@ -42,8 +42,8 @@ function CityMap() {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const userLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
+            lat: 45.747418,
+            lng: 21.231255,
           };
 
           setCenter(userLocation);

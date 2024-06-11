@@ -46,7 +46,7 @@ const LocalNotifications = () => {
 
   return (
     <div>
-      <h2>Local Messages</h2>
+      <h2>Local Notifications</h2>
       <div style={{ padding: "20px" }}>
         {messages.length > 0 ? (
           messages.map((message) => (
