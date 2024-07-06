@@ -13,13 +13,10 @@ import DSUpage from "./components/specialUsers/DSUpage";
 import DSPpage from "./components/specialUsers/DSPpage";
 import DisastersComponent from "./components/disasters/DisasterComponent";
 import Diagnostics from "./components/diagnostics/Diagnostics";
-// Removed APIclient and NotificationPermission imports as they're no longer needed here
 
 function App() {
   useEffect(() => {
-    // Only keep the Service Worker registration logic
     if ("serviceWorker" in navigator) {
-      // Register the service worker
       navigator.serviceWorker
         .register(`${process.env.PUBLIC_URL}/sw.js`)
         .then((registration) => {

@@ -3,10 +3,9 @@ import { Routes, Route, Link, useMatch } from "react-router-dom";
 import GeneralNotifications from "./GeneralNotifications";
 import LocalNotifications from "./LocalNotifications";
 import NavBar from "../costumizable/NavBar";
-import "./Notifications.css"; // Make sure to create this CSS file
+import "./Notifications.css";
 
 const Notifications = () => {
-  // Use `useMatch` to determine which route is currently active
   const isGeneralActive = useMatch("/notifications/general");
   const isLocalActive = useMatch("/notifications/local");
 

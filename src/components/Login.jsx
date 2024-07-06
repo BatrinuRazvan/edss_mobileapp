@@ -2,14 +2,13 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithGoogle } from "../services/firebase";
 import APIclient from "../services/restAPI";
-import { FaUser, FaUserTie, FaUserSecret, FaUserMd } from "react-icons/fa"; // Import icons
-import "./Login.css"; // Import a CSS file for styles
+import { FaUser, FaUserTie, FaUserSecret, FaUserMd } from "react-icons/fa";
+import "./Login.css";
 import NavBar from "./costumizable/NavBar";
 
 const Login = () => {
   const navigate = useNavigate();
 
-  // Modified login function to accept userType
   const login = (userType) => {
     signInWithGoogle()
       .then(({ user }) => {
@@ -24,7 +23,7 @@ const Login = () => {
                   email: user.email,
                   latitude,
                   longitude,
-                  userType, // Pass userType to saveUser
+                  userType,
                 })
                 .then(() => navigate("/"))
                 .catch((error) => {

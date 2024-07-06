@@ -12,7 +12,7 @@ class APIclient {
   saveResponses = (userId, responses) => {
     console.log(responses);
     return axiosInstance
-      .post(this.endpoint, { userId, responses }) // Assuming the backend expects an object with responses and email
+      .post(this.endpoint, { userId, responses })
       .then((res) => console.log(res.data));
   };
 
@@ -43,7 +43,6 @@ class APIclient {
   };
 
   saveUser = ({ userId, email, latitude, longitude, userType }) => {
-    // Construct a query string
     const params = new URLSearchParams({
       userId,
       email,
@@ -56,11 +55,9 @@ class APIclient {
   };
 
   saveSubscription = (userId, subscription) => {
-    // Extract the keys from the subscription object
     const key = subscription.getKey ? subscription.getKey("p256dh") : "";
     const auth = subscription.getKey ? subscription.getKey("auth") : "";
 
-    // Convert keys to base64 strings for easier handling on the backend
     const p256dh = key
       ? btoa(String.fromCharCode.apply(null, new Uint8Array(key)))
       : "";
@@ -68,11 +65,9 @@ class APIclient {
       ? btoa(String.fromCharCode.apply(null, new Uint8Array(auth)))
       : "";
 
-    // Log the keys for debugging purposes
     console.log(p256dh);
     console.log(authStr);
 
-    // Prepare the subscription object in the format expected by the backend
     const subscriptionData = {
       userId: userId,
       endpoint: subscription.endpoint,
@@ -80,7 +75,6 @@ class APIclient {
       auth: authStr,
     };
 
-    // Send the prepared subscription object to the backend
     return axiosInstance
       .post(this.endpoint, subscriptionData)
       .then((response) => console.log("Subscription saved:", response.data))

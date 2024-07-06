@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./ChatUi.css";
 import { FiSend } from "react-icons/fi";
-import botImage from "../logo512.png"; // Make sure the path is correct
+import botImage from "../logo512.png";
 import questions from "./dataQuestions/epidemicQuestions";
 import LLMapi from "../../services/llmAPI";
 import { auth } from "../../services/firebase";
@@ -11,7 +11,7 @@ const Epidemic = () => {
   const [messages, setMessages] = useState([]);
   const [userResponses, setUserResponses] = useState([]);
   const [animationStep, setAnimationStep] = useState("flyingIn");
-  const [showBubble, setShowBubble] = useState(false); // Used to control the bubble display
+  const [showBubble, setShowBubble] = useState(false);
   const messagesEndRef = useRef(null);
   const [showIcons, setShowIcons] = useState(false);
   const [currentQuestionId, setCurrentQuestionId] = useState(1);
@@ -29,7 +29,7 @@ const Epidemic = () => {
       case "shrinkAndMove":
         timeoutId = setTimeout(() => {
           setShowBubble(true);
-          setShowIcons(true); // Enable the icons to be shown after the animations
+          setShowIcons(true);
         }, 1000);
         break;
       default:
@@ -51,7 +51,6 @@ const Epidemic = () => {
   }, [messages]);
 
   const typeMessage = (text) => {
-    // Initial typing indicator message
     let typingMessage = { sender: "bot", text: "", isTyping: true };
     setMessages((prevMessages) => [...prevMessages, typingMessage]);
 
@@ -65,7 +64,6 @@ const Epidemic = () => {
 
         setTimeout(() => typeCharByChar(msg, index + 1), 0);
       } else {
-        // Typing completed
         setMessages((prevMessages) => [
           ...prevMessages.slice(0, -1),
           { ...typingMessage, isTyping: false },
@@ -77,20 +75,18 @@ const Epidemic = () => {
   };
 
   const handleOptionClick = (option) => {
-    // Add user's message and response to the state
     setMessages((prevMessages) => [
       ...prevMessages,
       { sender: "user", text: option.text },
     ]);
 
-    // Set user's response with the selected option
     setUserResponses((prevResponses) => [
       ...prevResponses,
       { question: messages[messages.length - 1]?.text, response: option.text },
     ]);
 
     if (option.nextQuestionId) {
-      setCurrentQuestionId(option.nextQuestionId); // Update the current question ID
+      setCurrentQuestionId(option.nextQuestionId);
       console.log(currentQuestionId);
       const nextQuestion = questions.find(
         (q) => q.id === option.nextQuestionId
@@ -113,9 +109,9 @@ const Epidemic = () => {
       return;
     }
 
-    const apiClient = new APIclient("/user/saveResponse"); // Adjust your endpoint as needed
+    const apiClient = new APIclient("/user/saveResponse");
     apiClient
-      .saveResponses(userId, userResponses) // Pass the userId instead of email
+      .saveResponses(userId, userResponses)
       .then(() => console.log("All responses sent successfully!"))
       .catch((error) => console.error("Failed to send responses:", error));
   }, [userResponses]);
@@ -134,7 +130,6 @@ const Epidemic = () => {
 
   const handleUserLLMQuestion = async () => {
     if (userInput.trim() !== "") {
-      // Directly display user's input immediately
       setMessages((prevMessages) => [
         ...prevMessages,
         { sender: "user", text: userInput },
@@ -144,14 +139,12 @@ const Epidemic = () => {
         const llmResponse = await llmAPI.sendToAnswer(userInput);
         const responseText = llmResponse.response;
 
-        // Use typeMessage to display the bot's response with the typing effect
         typeMessage(responseText);
 
-        setUserInput(""); // Clear the input field after sending
+        setUserInput("");
       } catch (error) {
         console.error("Error fetching response from LLM:", error);
 
-        // Use typeMessage to display an error message from the bot with the typing effect
         typeMessage("Sorry, I'm having trouble finding an answer right now.");
       }
     }
@@ -176,16 +169,14 @@ const Epidemic = () => {
         }`}
         style={{ backgroundImage: `url(${botImage})` }}
       />
-      {showBubble && <div className="bubble" />}{" "}
-      {/* The bubble is now conditional on showBubble being true */}
+      {showBubble && <div className="bubble" />} {/*bubble is now conditional*/}
       <div id="messageList">
         <div className="messages">
           {messages.map((message, index) => (
             <div key={index} className={`message ${message.sender}`}>
-              {message.sender === "bot" &&
-                showIcons && ( // Only show the icon if showIcons is true
-                  <div className="message-icon"></div>
-                )}
+              {message.sender === "bot" && showIcons && (
+                <div className="message-icon"></div>
+              )}
               <div className="message-content">{message.text}</div>
             </div>
           ))}

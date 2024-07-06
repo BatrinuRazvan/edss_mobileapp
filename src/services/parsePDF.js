@@ -19,7 +19,7 @@ const parsePDF = async (file) => {
           textContent += textItems.join(" ");
         }
 
-        resolve(textContent); // Return parsed PDF content
+        resolve(textContent);
       };
 
       fileReader.onerror = (error) => {

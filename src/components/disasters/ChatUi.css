@@ -74,11 +74,11 @@ align-items: center;
 .options-container {
   width: 100%;
   display: flex;
-  flex-wrap: wrap; /* Allow items to wrap onto multiple lines if needed */
-  justify-content: space-around; /* Center items to make it look balanced */
-  align-items: center; /* Align items vertically */
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
   padding: 10px;
-  gap: 10px; /* Adds space between buttons when wrapped */
+  gap: 10px;
   background: #f2f2f2;
 }
 
@@ -91,9 +91,8 @@ button {
   border-radius: 18px;
   cursor: pointer;
   font-size: 16px;
-  /* margin: 0 5px; Removed and replaced with gap in the container */
-  min-width: 100px; /* Ensures buttons have a minimum width */
-  white-space: nowrap; /* Prevents text from wrapping inside the button */
+  min-width: 100px;
+  white-space: nowrap;
 }
 
 button:hover {
@@ -179,7 +178,6 @@ max-width: 95%;
 }
 }
 
-/* Animation Keyframes */
 @keyframes flyingIn {
 from {
 transform: translateY(-100vh) scale(0);
@@ -216,7 +214,7 @@ transform: scale(1) translate(0, 0);
   }
 100% {
 opacity: 0;
-transform: scale(0.5) translate(-57vh, -97vh); /* Adjust this to match the chat bubble's position */
+transform: scale(0.5) translate(-57vh, -97vh);
 }
 }
 
@@ -224,39 +222,35 @@ transform: scale(0.5) translate(-57vh, -97vh); /* Adjust this to match the chat 
   0% {
     width: 100vw;
     height: 100vh;
-    border-radius: 0%; /* Start with no border radius */
+    border-radius: 0%;
     transform: translate(-50%, -50%) scale(1);
     opacity: 1;
     top: 50%;
     left: 50%;
   }
   100% {
-    width: 30vw; /* Adjust the width for capsule width */
-    height: 10vh; /* Adjust the height for capsule height */
-    border-radius: 50vmax; /* Use vmax for consistent capsule shaping */
+    width: 30vw;
+    height: 10vh;
+    border-radius: 50vmax;
     transform: translate(-50%, -50%) scale(0);
-    opacity: 0; /* Keep the opacity if you want the capsule to stay visible */
-    top: 50%; /* Center vertically */
-    left: 50%; /* Center horizontally */
+    opacity: 0;
+    top: 50%;
+    left: 50%;
   }
 }
 
-/* Applied to .bot-image when it is flying in */
 .bot-image.flying-in {
 animation: flyingIn 1s forwards;
 }
 
-/* Applied to .bot-image when it is bouncing */
 .bot-image.bouncing {
 animation: bounce 2s infinite;
 }
 
-/* Applied to .bot-image when it moves to the chat bubble */
 .bot-image.shrink-and-move {
 animation: moveToBubble 1s forwards;
 }
 
-/* Applied to .full-blue-background when it starts shrinking */
 .full-blue-background.shrinking {
 animation: shrinkToCapsule 0.5s forwards;
 }
@@ -265,8 +259,8 @@ animation: shrinkToCapsule 0.5s forwards;
 background-image: url('../logo512.png'); 
 background-size: cover;
 display: inline-block;
-width: 20px; /* Or the size of your icon */
-height: 20px; /* Or the size of your icon */
+width: 20px;
+height: 20px;
 margin-right: 5px;
 }
 
@@ -287,17 +281,12 @@ margin-right: 5px;
 
 .bubble-container {
   position: absolute;
-  right: 10px; /* Adjust as needed /
-  bottom: 10px; / Adjust as needed to place it next to the chat */
+  right: 10px;
   display: flex;
   align-items: center;
   }
   .bubble {
-    width: 20px; /* Size of the bubble /
-    height: 20px; / Size of the bubble /
-    background-color: #34b7f1; / Color of the bubble /
-    border-radius: 50%;
-    / Add other styles such as shadows if necessary */
+    width: 20px;
   }
 
 
@@ -306,34 +295,31 @@ margin-right: 5px;
   display: flex;
   align-items: center;
   padding: 5px;
-  gap: 6px; /* Adjust the space between the input and the button */
+  gap: 6px;
 }
 
 .user-input {
-  flex-grow: 1; /* Input takes up available space */
-  transition: flex-grow 0.3s ease; /* Smooth transition for resizing */
+  flex-grow: 1;
+  transition: flex-grow 0.3s ease;
   border: none;
-  background-color: #f0f0f0; /* Match container background */
+  background-color: #f0f0f0;
   padding: 10px 15px;
-  border-radius: 20px; /* Capsule-like shape */
-  margin-right: 6px; /* Space between input and button */
-  /* Other styles remain the same */
+  border-radius: 20px;
+  margin-right: 6px;
 }
 
 .send-button {
-  flex-grow: 1; /* Button takes up available space */
-  transition: flex-grow 0.3s ease; /* Smooth transition for resizing */
-  /* Ensure there's no text overflow */
+  flex-grow: 1;
+  transition: flex-grow 0.3s ease;
   white-space: nowrap;
   border-radius: 30px;
   overflow: hidden;
   background-color: rgb(6, 190, 6);
-  /* Other button styles */
 }
 
 .send-button.icon-only {
-  flex-grow: 0; /* Button shrinks to fit icon only */
-  width: 60px; /* Adjust based on your icon size for a snug fit */
+  flex-grow: 0;
+  width: 60px;
   display: flex;
   justify-content: center;
   align-items: center;

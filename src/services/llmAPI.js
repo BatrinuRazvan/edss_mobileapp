@@ -5,13 +5,13 @@ const llmPrompt =
 
 class LLMapi {
   constructor() {
-    this.apiKey = process.env.REACT_APP_OPENAI_API_KEY; // Ensure your API key is securely managed
+    this.apiKey = process.env.REACT_APP_OPENAI_API_KEY;
     this.openai = new OpenAI({
       apiKey: this.apiKey,
-      dangerouslyAllowBrowser: true, // Note: Be cautious about exposing sensitive API keys in the browser.
+      dangerouslyAllowBrowser: true,
     });
     this.summarizedContent =
-      JSON.parse(localStorage.getItem("summarizedContent")) || []; // Retrieve summarized content from localStorage
+      JSON.parse(localStorage.getItem("summarizedContent")) || [];
   }
 
   sendToAnswer = async (userMessage) => {
@@ -19,7 +19,6 @@ class LLMapi {
       let prompt = llmPrompt;
 
       console.log(this.summarizedContent);
-      // Include summarized content in the prompt if available
       if (this.summarizedContent.length > 0) {
         prompt += ` ${this.summarizedContent.join(" ")}`;
       }
@@ -66,16 +65,14 @@ class LLMapi {
 
       console.log("Full API Response: ", JSON.stringify(response, null, 2));
 
-      // Correctly access the content of the assistant's message
       if (response && response.choices && response.choices.length > 0) {
-        let content = response.choices[0].message.content; // Correctly accessing the message content
+        let content = response.choices[0].message.content;
 
-        // Store the summarized content for future use
         this.summarizedContent.push(content);
         localStorage.setItem(
           "summarizedContent",
           JSON.stringify(this.summarizedContent)
-        ); // Store summarized content in localStorage
+        );
 
         return {
           status: 1,

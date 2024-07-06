@@ -36,7 +36,6 @@ const Diagnostics = () => {
         const selectedQuestions =
           userType === "MEDIC" ? medicQuestions : diagnosticsQuestions;
         setQuestions(selectedQuestions);
-        // Set the first question after confirming the correct question set
         const firstQuestion = selectedQuestions.find((q) => q.id === 1);
         if (firstQuestion) {
           setMessages([{ sender: "bot", text: firstQuestion.text }]);
@@ -70,13 +69,6 @@ const Diagnostics = () => {
 
     return () => clearTimeout(timeoutId);
   }, [animationStep]);
-
-  // useEffect(() => {
-  //   const firstQuestion = questions.find((q) => q.id === 1);
-  //   if (firstQuestion && messages.length === 0) {
-  //     setMessages([{ sender: "bot", text: firstQuestion.text }]);
-  //   }
-  // }, [messages.length, questions]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

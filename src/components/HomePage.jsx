@@ -1,15 +1,14 @@
-import "./Components.css"; // Ensure your CSS file is correctly imported
+import "./Components.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../services/firebase";
-import APIclient from "../services/restAPI"; // Adjust based on your actual path
+import APIclient from "../services/restAPI";
 import DraggableBubble from "./costumizable/DraggableBubble";
 import NavBar from "./costumizable/NavBar";
 import { MdNotifications, MdMap, MdHealing, MdWarning } from "react-icons/md";
 import { FaUserSecret, FaUserTie } from "react-icons/fa";
 
-// Assuming urlBase64ToUint8Array function is moved to a utility file or kept here
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
@@ -32,7 +31,6 @@ const askForNotificationPermission = (user) => {
       .then((permission) => {
         if (permission === "granted") {
           console.log("Notification permission granted.");
-          // Assuming service worker registration is already done in index.js or App.js
           navigator.serviceWorker.ready.then((registration) => {
             subscribeUserToPush(user, registration);
           });
@@ -45,7 +43,7 @@ const askForNotificationPermission = (user) => {
 };
 
 const subscribeUserToPush = (user, registration) => {
-  const publicKey = process.env.REACT_APP_PUBLIC_VAPID_KEY; // Use your VAPID public key
+  const publicKey = process.env.REACT_APP_PUBLIC_VAPID_KEY;
   registration.pushManager
     .subscribe({
       userVisibleOnly: true,
@@ -67,14 +65,13 @@ const HomePage = () => {
 
   useEffect(() => {
     const subscribe = onAuthStateChanged(auth, async (user) => {
-      // Make the callback async
       if (user) {
         console.log("User logged in:", user);
         askForNotificationPermission(user);
 
         const apiclient = new APIclient("/user/getUserType");
         try {
-          const storedUserType = await apiclient.getUserType(user.uid); // Await the async call
+          const storedUserType = await apiclient.getUserType(user.uid);
           setUserType(storedUserType);
           if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(
@@ -107,7 +104,7 @@ const HomePage = () => {
     setExpand({ [scenarioId]: true });
     setTimeout(() => {
       navigate(`/${scenarioId}`);
-    }, 500); // Optional: Adjust time as needed or remove if no delay is required
+    }, 500);
   };
 
   const circleRadius = 150;
@@ -154,17 +151,14 @@ const HomePage = () => {
       : []),
   ];
 
-  // Compute positions for four primary bubbles and center position for the fifth
   const initialPositions = scenarios.map((scenario, index, array) => {
     if (
       array.length === 5 &&
       (scenario.id === "DSU" || scenario.id === "DSP")
     ) {
-      // Center position for the fifth bubble
       return { x: containerCenter.x - 50, y: containerCenter.y - 50 };
     } else {
-      // Calculate positions for the other four bubbles
-      const angle = (index / 4) * 2 * Math.PI; // Always base on four main scenarios
+      const angle = (index / 4) * 2 * Math.PI;
       return {
         x: containerCenter.x + circleRadius * Math.cos(angle) - 50,
         y: containerCenter.y + circleRadius * Math.sin(angle) - 50,
@@ -174,12 +168,11 @@ const HomePage = () => {
 
   const [animationClass, setAnimationClass] = useState("");
   const handleDisastersClick = () => {
-    // Assume there's a state to manage class names for animation
     setAnimationClass("fade-out");
 
     setTimeout(() => {
       navigate("/disasters");
-    }, 500); // Corresponds to the duration of the fade-out animation
+    }, 500);
   };
 
   return (

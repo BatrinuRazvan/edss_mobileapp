@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./NavBar.css"; // Custom CSS file
+import "./NavBar.css";
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,7 +17,7 @@ const NavBar = () => {
   const navigateToPage = (page) => {
     navigate(`/${page}`);
     setIsMenuOpen(false);
-    setIsDisastersDropdownOpen(false); // Close submenu after navigation
+    setIsDisastersDropdownOpen(false);
   };
 
   const toggleDisastersDropdown = () => {

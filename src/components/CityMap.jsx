@@ -13,12 +13,12 @@ const containerStyle = {
   margin: "20px 0",
 };
 
-const defaultCenter = { lat: -34.397, lng: 150.644 }; // Adjust based on your location
+const defaultCenter = { lat: -34.397, lng: 150.644 };
 
 function CityMap() {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: process.env.REACT_APP_MAPS_API_KEY, // Replace with your actual API key
+    googleMapsApiKey: process.env.REACT_APP_MAPS_API_KEY,
     libraries: ["places"],
   });
 
@@ -132,15 +132,14 @@ function CityMap() {
           setCenter(userLocation);
           map.panTo(userLocation);
 
-          // Example: Predefined exit point. Replace with actual logic for finding nearest exit.
           const apiClient = new APIclient();
           const cityMarker = await apiClient.getNearestExit(userLocation);
           const exitLocation = {
             lat: cityMarker.latitude,
             lng: cityMarker.longitude,
           };
-          setNavigationDestination(exitLocation); // Set for navigation
-          planRoute(userLocation, exitLocation, google.maps.TravelMode.DRIVING); // Example: Driving to exit
+          setNavigationDestination(exitLocation);
+          planRoute(userLocation, exitLocation, google.maps.TravelMode.DRIVING);
         },
         (error) => {
           console.error("Error obtaining location", error);
@@ -170,7 +169,6 @@ function CityMap() {
 
   const navigateUsingGoogleMaps = (travelMode) => {
     if (!navigationDestination) return;
-    // Directly use the lat and lng properties if navigationDestination is a plain object.
     const destination = `${navigationDestination.lat},${navigationDestination.lng}`;
     const mode =
       travelMode === "DRIVING"

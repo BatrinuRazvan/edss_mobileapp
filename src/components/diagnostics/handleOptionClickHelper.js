@@ -1,4 +1,4 @@
-import APIclient from "../../services/restAPI"; // Adjust the path as necessary
+import APIclient from "../../services/restAPI";
 
 const handleOptionClickHelper = async (
   option,

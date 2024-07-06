@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../../services/firebase"; // Ensure this path matches your project structure
-import { signOut } from "firebase/auth"; // Import the signOut method
+import { auth } from "../../services/firebase";
+import { signOut } from "firebase/auth";
 import { FaMapMarkerAlt, FaBell } from "react-icons/fa";
 import "./ManageAccount.css";
 
 const ManageAccount = () => {
-  const navigate = useNavigate(); // Hook to navigate to different routes
+  const navigate = useNavigate();
   const [notificationEnabled, setNotificationEnabled] = useState(false);
   const [locationEnabled, setLocationEnabled] = useState(false);
 
-  // Check initial notification and location permission status
   useEffect(() => {
     if ("Notification" in window) {
       setNotificationEnabled(Notification.permission === "granted");
@@ -29,7 +28,6 @@ const ManageAccount = () => {
         if (permission === "granted") {
           setNotificationEnabled(true);
           console.log("Notification permission granted.");
-          // Here you can also subscribe the user to push notifications
         } else {
           console.log("Notification permission denied.");
         }
@@ -71,8 +69,6 @@ const ManageAccount = () => {
   };
 
   const disableLocationPermission = () => {
-    // This is a mock function to simulate disabling location permission
-    // In a real application, you'd handle this differently depending on your needs
     if ("permissions" in navigator && "revoke" in navigator.permissions) {
       navigator.permissions.revoke({ name: "geolocation" }).then((result) => {
         if (result.state !== "granted") {
@@ -89,12 +85,10 @@ const ManageAccount = () => {
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        // Sign-out successful.
         console.log("User logged out successfully");
-        navigate("/login"); // Redirect to login page or home page as per your app flow
+        navigate("/login");
       })
       .catch((error) => {
-        // An error happened.
         console.error("Logout failed", error);
       });
   };

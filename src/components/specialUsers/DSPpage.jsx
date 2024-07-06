@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../disasters/ChatUi.css";
 import { FiSend } from "react-icons/fi";
-import { AiOutlineUpload } from "react-icons/ai"; // Import upload icon
-import botImage from "../logo512.png"; // Make sure the path is correct
+import { AiOutlineUpload } from "react-icons/ai";
+import botImage from "../logo512.png";
 import LLMapi from "../../services/llmAPI";
 import { parsePDF } from "../../services/parsePDF";
 
 const DSPpage = () => {
   const [messages, setMessages] = useState([]);
   const [animationStep, setAnimationStep] = useState("flyingIn");
-  const [showBubble, setShowBubble] = useState(false); // Used to control the bubble display
+  const [showBubble, setShowBubble] = useState(false);
   const messagesEndRef = useRef(null);
   const [showIcons, setShowIcons] = useState(false);
   const [userInput, setUserInput] = useState("");
@@ -28,7 +28,7 @@ const DSPpage = () => {
       case "shrinkAndMove":
         timeoutId = setTimeout(() => {
           setShowBubble(true);
-          setShowIcons(true); // Enable the icons to be shown after the animations
+          setShowIcons(true);
           setChatStarted(true);
           typeMessage(
             "Hello! Here you can talk to me, the assistent, and define new behaviour by uploading files as a attested DSP user. \n\nHow can I help you today?"
@@ -47,7 +47,6 @@ const DSPpage = () => {
   }, [messages]);
 
   const typeMessage = (text) => {
-    // Initial typing indicator message
     let typingMessage = { sender: "bot", text: "", isTyping: true };
     setMessages((prevMessages) => [...prevMessages, typingMessage]);
 
@@ -61,7 +60,6 @@ const DSPpage = () => {
 
         setTimeout(() => typeCharByChar(msg, index + 1), 0);
       } else {
-        // Typing completed
         setMessages((prevMessages) => [
           ...prevMessages.slice(0, -1),
           { ...typingMessage, isTyping: false },
@@ -74,7 +72,6 @@ const DSPpage = () => {
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
-    // Set "I uploaded a file" message
     setMessages((prevMessages) => [
       ...prevMessages,
       {
@@ -83,17 +80,13 @@ const DSPpage = () => {
       },
     ]);
     try {
-      // Parse the PDF file
       const fullContent = await parsePDF(file);
-      // Summarize the parsed content
       const llmAPI = new LLMapi();
       const summarizedContent = await llmAPI.summarizePDF(fullContent);
-      // Add bot response to messages
       console.log(summarizedContent);
       typeMessage(summarizedContent.response);
     } catch (error) {
       console.error("Error parsing or summarizing PDF:", error);
-      // Display error message to the user
       setMessages((prevMessages) => [
         ...prevMessages,
         { sender: "bot", text: "Sorry, I couldn't process the uploaded file." },
@@ -107,7 +100,6 @@ const DSPpage = () => {
 
   const handleSendQuestion = async () => {
     if (userInput.trim() !== "") {
-      // Directly display user's input immediately
       setMessages((prevMessages) => [
         ...prevMessages,
         { sender: "user", text: userInput },
@@ -118,14 +110,12 @@ const DSPpage = () => {
         const llmResponse = await llmAPI.sendToAnswer(userInput);
         const responseText = llmResponse.response;
 
-        // Use typeMessage to display the bot's response with the typing effect
         typeMessage(responseText);
 
-        setUserInput(""); // Clear the input field after sending
+        setUserInput("");
       } catch (error) {
         console.error("Error fetching response from LLM:", error);
 
-        // Use typeMessage to display an error message from the bot with the typing effect
         typeMessage("Sorry, I'm having trouble finding an answer right now.");
       }
     }
@@ -148,13 +138,11 @@ const DSPpage = () => {
         }`}
         style={{ backgroundImage: `url(${botImage})` }}
       />
-      {showBubble && <div className="bubble" />}{" "}
-      {/* The bubble is now conditional on showBubble being true */}
+      {showBubble && <div className="bubble" />} {/*bubble is now conditional*/}
       <div id="messageList">
         <div className="messages">
           {messages.map(
             (message, index) =>
-              // Render messages conditionally after the chat has started
               chatStarted && (
                 <div key={index} className={`message ${message.sender}`}>
                   {message.sender === "bot" && showIcons && (
@@ -175,7 +163,7 @@ const DSPpage = () => {
             className="user-input"
           />
           <button
-            onClick={() => fileInputRef.current.click()} // Trigger file input click
+            onClick={() => fileInputRef.current.click()}
             className="send-button icon-only"
           >
             <AiOutlineUpload size={24} />
@@ -183,7 +171,7 @@ const DSPpage = () => {
           <input
             type="file"
             ref={fileInputRef}
-            style={{ display: "none" }} // Hide the file input
+            style={{ display: "none" }}
             onChange={handleFileUpload}
           />
           <button

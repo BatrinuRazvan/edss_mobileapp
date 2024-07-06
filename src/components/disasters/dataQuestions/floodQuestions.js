@@ -157,7 +157,6 @@ const questions = [
     text: "Listen all the time to what your local authorities have to say. Until further instructions, you should be safe. Remember:\n\n\t1. Stay on higher ground\n\t2. Keep clear of the running water on foot or in your car\n\t3. Keep you Go Bag near\n\t4. Always be ready to switch shelter or evacuate!",
     options: [{ text: "Good!", nextQuestionId: 10 }],
   },
-  // ... any other questions
 ];
 
 export default questions;

@@ -11,24 +11,23 @@ const DraggableBubble = ({
 }) => {
   const [position, setPosition] = useState(initialPos || { x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false); // Tracks whether the bubble is in its expanded state
-  const [rel, setRel] = useState({ x: 0, y: 0 }); // Relative position of the cursor to the bubble
-  const [iconOpacity, setIconOpacity] = useState(1); // 1 means fully visible
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [rel, setRel] = useState({ x: 0, y: 0 });
+  const [iconOpacity, setIconOpacity] = useState(1);
 
   useEffect(() => {
     if (isExpanded) {
-      setIconOpacity(0); // Fade out icon
+      setIconOpacity(0);
     } else {
-      setIconOpacity(1); // Fade in icon
+      setIconOpacity(1);
     }
   }, [isExpanded]);
 
   useEffect(() => {
-    setIsExpanded(expand); // Listen to changes in `expand` prop to trigger expand animation
+    setIsExpanded(expand);
   }, [expand]);
 
   const onMouseDown = useCallback((e) => {
-    // Only allow left mouse button for drag
     if (e.button !== 0) return;
     setIsDragging(true);
 
@@ -71,12 +70,11 @@ const DraggableBubble = ({
     };
   }, [isDragging, onMouseMove]);
 
-  // Modify this function to handle the onClick event, potentially for navigation or expanding
   const handleOnClick = (e) => {
     if (!isDragging) {
       onClick(e);
       if (expandOnClick) {
-        setIsExpanded(!isExpanded); // Toggle expansion
+        setIsExpanded(!isExpanded);
       }
     }
   };
@@ -96,7 +94,7 @@ const DraggableBubble = ({
         justifyContent: "center",
         zIndex: isExpanded ? 1000 : 1,
       }}
-      onMouseDown={!isExpanded ? onMouseDown : null} // Disable dragging when expanded
+      onMouseDown={!isExpanded ? onMouseDown : null}
       onClick={handleOnClick}
     >
       <div className="icon-transition" style={{ opacity: iconOpacity }}>

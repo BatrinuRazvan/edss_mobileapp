@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DraggableBubble from "../costumizable/DraggableBubble";
-import "../Components.css"; // Ensure CSS is properly imported
+import "../Components.css";
 import NavBar from "../costumizable/NavBar";
-import { FaBiohazard, FaWind } from "react-icons/fa"; // Example icons
+import { FaBiohazard, FaWind } from "react-icons/fa";
 import { RiEarthquakeLine } from "react-icons/ri";
 import { MdOutlineFlood } from "react-icons/md";
 
@@ -11,7 +11,6 @@ const DisasterComponent = () => {
   const navigate = useNavigate();
   const [expand, setExpand] = useState({});
 
-  // Define disaster scenarios with icons
   const scenarios = [
     {
       id: "earthquake",
@@ -45,7 +44,7 @@ const DisasterComponent = () => {
       navigate(`/${scenarioId}`, {
         state: { animation: "startChatTransition" },
       });
-    }, 1000); // Optional delay for aesthetic purposes
+    }, 1000);
   };
 
   const circleRadius = 150;
@@ -54,7 +53,7 @@ const DisasterComponent = () => {
   const initialPositions = scenarios.map((_, index) => {
     const angle = (index / scenarios.length) * 2 * Math.PI;
     return {
-      x: containerCenter.x + circleRadius * Math.cos(angle) - 50, // Adjust for bubble size
+      x: containerCenter.x + circleRadius * Math.cos(angle) - 50,
       y: containerCenter.y + circleRadius * Math.sin(angle) - 50,
     };
   });

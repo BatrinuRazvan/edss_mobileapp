@@ -19,12 +19,10 @@ const provider = new GoogleAuthProvider();
 const signInWithGoogle = () => {
   return signInWithPopup(auth, provider)
     .then((result) => {
-      // Handle the result as needed, maybe return user info here
       return { user: result.user };
     })
     .catch((error) => {
-      // Handle errors here
-      throw error; // Rethrow or handle as needed
+      throw error;
     });
 };
 
